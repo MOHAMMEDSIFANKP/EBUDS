@@ -1,0 +1,106 @@
+/*---------------------
+  Footer
+-----------------------*/
+.footer {
+  background: $heading-color;
+  padding-top: 70px;
+}
+
+.footer__about {
+  margin-bottom: 30px;
+  
+  .footer__logo {
+    margin-bottom: 30px;
+
+    a {
+      display: inline-block;
+    }
+  }
+
+  p {
+    color: #b7b7b7;
+    margin-bottom: 30px;
+  }
+}
+
+.footer__widget {
+  margin-bottom: 30px;
+
+  h6 {
+    color: $white-color;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  ul {
+
+    li {
+      line-height: 36px;
+      list-style: none;
+
+      a {
+        color: #b7b7b7;
+        font-size: 15px;
+      }
+    }
+  }
+
+  
+  .footer__newslatter {
+    
+    p {
+      color: #b7b7b7;
+    }
+
+    form {
+      position: relative;
+
+      input {
+        width: 100%;
+        font-size: 15px;
+        color: #3d3d3d;
+        background: transparent;
+        border: none;
+        padding: 15px 0;
+        border-bottom: 2px solid $white-color;
+
+        &::placeholder {
+          color: #3d3d3d;
+        }
+      }
+
+      button {
+        color: #b7b7b7;
+        font-size: 16px;
+        position: absolute;
+        right: 5px;
+        top: 0;
+        height: 100%;
+        background: transparent;
+        border: none;
+      }
+    }
+  }
+}
+
+.footer__copyright__text {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 0;
+  margin-top: 40px;
+
+  p {
+    color: #b7b7b7;
+    margin-bottom: 0;
+
+    i {
+      color: $primary-color;
+    }
+
+    a {
+      color: $primary-color;
+    }
+  }
+}

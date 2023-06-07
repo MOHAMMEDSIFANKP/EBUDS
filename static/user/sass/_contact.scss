@@ -1,0 +1,93 @@
+/*---------------------
+  Map
+-----------------------*/
+.map {
+  height: 500px;
+
+  iframe {
+    width: 100%;
+  }
+}
+
+/*---------------------
+  Contact
+-----------------------*/
+.contact__text{
+
+  .section-title {
+    text-align: left;
+    margin-bottom: 40px;
+
+    h2 {
+      font-size: 48px;
+      margin-bottom: 18px;
+    }
+
+    p {
+      color: #707070;
+      line-height: 26px;
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+
+    li {
+      list-style: none;
+      margin-bottom: 26px;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      h4 {
+        color: $heading-color;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      p {
+        line-height: 27px;
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+.contact__form {
+
+  input {
+    height: 50px;
+    width: 100%;
+    border: 1px solid #e1e1e1;
+    padding-left: 20px;
+    font-size: 15px;
+    color: #b7b7b7;
+    margin-bottom: 30px;
+
+    &::placeholder {
+      color: #b7b7b7;
+    }
+  }
+
+  textarea {
+    height: 150px;
+    width: 100%;
+    border: 1px solid #e1e1e1;
+    padding-left: 20px;
+    padding-top: 12px;
+    font-size: 15px;
+    color: #b7b7b7;
+    margin-bottom: 24px;
+    resize: none;
+
+    &::placeholder {
+      color: #b7b7b7;
+    }
+  }
+
+  button {
+    letter-spacing: 4px;
+    padding: 14px 35px;
+  }
+}

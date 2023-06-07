@@ -1,0 +1,14 @@
+rlPyCairo-0.2.0.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+rlPyCairo-0.2.0.dist-info/METADATA,sha256=Jfx7_l92P6qDG4tqhlxeByQWoDKp3SKHG0dQMN4oPqM,4779
+rlPyCairo-0.2.0.dist-info/RECORD,,
+rlPyCairo-0.2.0.dist-info/WHEEL,sha256=2wepM1nk4DS4eFpYrW1TTqPcoGNfHhhO_i5m4cOimbo,92
+rlPyCairo-0.2.0.dist-info/top_level.txt,sha256=hwXy2JsNHVtM0Tl9wU3ToJWx-zZJBHldYASgRYgFcZA,10
+rlPyCairo/INSTALL.txt,sha256=Ol1E-110pjEomSsSdtC-MiIBJ3jZDUJnnCdj0MosbY0,53
+rlPyCairo/LICENSE.txt,sha256=5vQnWinGkAlvwZoA274cAn54WjxIlfKN2Vbu8LlF6nE,1707
+rlPyCairo/README.txt,sha256=goEu45kX3b7PwYJ91lBrJXnQF4TURnIvag75U0H9STc,3767
+rlPyCairo/__init__.py,sha256=2gULbrSPOB8y9KP0ao9JAuXt2tbZgBSz7ma_XquYwC8,200
+rlPyCairo/__pycache__/__init__.cpython-310.pyc,,
+rlPyCairo/__pycache__/gstate.cpython-310.pyc,,
+rlPyCairo/__pycache__/pil2pict.cpython-310.pyc,,
+rlPyCairo/gstate.py,sha256=TEPJubhq0eermq2CYuPXJyT4z_uAKKrxUUUCXPkZvvg,8095
+rlPyCairo/pil2pict.py,sha256=URBOUdjEg7ZwOBnnaw2BFtIkT1PHDliEdDgqtCcWEhQ,4494

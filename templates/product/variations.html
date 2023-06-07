@@ -1,0 +1,259 @@
+{% extends 'admin/dashboardbase.html' %}
+{% block title %}Variation{% endblock  %}
+{% block body %}
+<!-- Button trigger modal -->
+<a type="button" class="btn btn-secondary w-60" style="margin-top: 80px;margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#addCategory">
+  <i title="Add Category" class="fa fa-plus">Add Variations</i>
+</a>
+{% if messages %}
+
+{% for message in messages %}
+
+<div class="text-center text-danger">
+<strong>{{message}}</strong>
+</div>
+{% endfor %}
+{% endif %}
+
+<!--Add category  Modal -->
+<div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title fs-5" id="exampleModalLabel">Add Variation</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+      <form action="{%url 'createvariations'%}"  enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+
+        <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
+            <img class="img-fluid w-100" src="{{var.image1.url}} " alt="">
+          </div> 
+          <div class="form-outline mb-4">
+            <input name="image1" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+          </div>
+
+          <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
+            <img class="img-fluid w-100" src="{{var.image2.url}} " alt="">
+          </div> 
+          <div class="form-outline mb-4">
+            <input name="image2" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+          </div>
+
+          <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
+            <img class="img-fluid w-100" src="{{var.image3.url}} " alt="">
+          </div> 
+          <div class="form-outline mb-4">
+            <input name="image3" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+          </div>
+          <div class="form-outline mb-4">
+            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="product">
+              {% for b in prodect %}
+              <option value="{{b.id}}" >{{b.product_name}}</option>
+              {% endfor %}
+            </select>
+            <label class="form-label" for="form3Example3cg">Product</label>
+          </div>
+          <div class="form-outline mb-4">
+            <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="color">
+              {% for b in color %}
+              <option value="{{b.color}}" >{{b.color}}</option>
+              {% endfor %}
+            </select>
+            <label class="form-label" for="form3Example3cg">Color</label>
+          </div>
+          <div class="form-outline mb-4">
+            <input name='qty' value="{{c.quantity}}"  type="number" id="form3Example3cg" class="form-control form-control-lg" />
+            <label class="form-label" for="form3Example3cg">Quantity</label>
+          </div>
+          <div class="d-flex justify-content-center">
+            <button type="submit"
+              class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light mb-3" type="submit" >Save Changes</button>
+          </div>
+
+        </form>
+    </div>
+  </div>
+</div>
+</div>
+<!--end of add product modal-->
+
+<div class="pagetitle pt-3 ps-5">
+  <div class="shop__sidebar__search me-4" style="float: right;">
+    <form action="{%url 'search_variations'%}">
+      <input type="text" placeholder="Search..." name="keyword" style="border-radius: 20px; height: 40px; text-align: center; font-size: 16px;">
+      <button type="submit"><span class="icon_search"></span></button>
+    </form>
+  </div>
+  <h1 style="font-weight: bold;">Variation</h1>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+  <div class="row">
+
+    <!-- Left side columns -->
+    <div class="col-lg-12">
+      <div class="row">
+
+        <!-- Recent Sales -->
+        <div class="col-12">
+          <div class="card recent-sales overflow-auto">
+            <div class="card-body">
+
+              <table class="table table-borderless datatable">
+                <thead>
+                  <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">image 1</th>
+                    <th scope="col">image 2</th>
+                    <th scope="col">image 3</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                
+                {% for var in variation %}
+
+                  <tr>
+                    <td>  {{var.id}}  </td>
+                    <td>
+                      <div style="width: 60px;" class="overflow-hidden">
+                        <img class="w-100" src=" {{var.image1.url}} " alt="">
+                      </div>
+                    </td>
+                    <td>
+                      <div style="width: 60px;" class="overflow-hidden">
+                        <img class="w-100" src=" {{var.image2.url}} " alt="">
+                      </div>
+                    </td>
+                    <td>
+                      <div style="width: 60px;" class="overflow-hidden">
+                        <img class="w-100" src=" {{var.image3.url}} " alt="">
+                      </div>
+                    </td>
+                    <td>  {{var.product}} </td>
+                    <td>  {{var.color}} </td>
+                    <td>  {{var.quantity}} </td>
+
+                    <!-- edit -->
+
+                      <!-- Button trigger modal -->
+                      <td><a type="button" class="fs-4 btn btn-warning" data-bs-toggle="modal" data-bs-target="#confirmEdit{{forloop.counter}}">
+                        <i title="" class="fa fa-edit">edit</i>
+                      </a> 
+                      <!--Edit Modal -->
+                       <div class="modal fade" id="confirmEdit{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Variations</h1>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <form  method="POST" action="{%url 'editvariations' var.id %}"  enctype="multipart/form-data">
+                                {% csrf_token %}
+  
+                                <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
+                                  <img class="img-fluid w-100" src="{{var.image1.url}} " alt="">
+                                </div> 
+                                <div class="form-outline mb-4">
+                                  <input name="image1" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                                </div>
+
+                                <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
+                                  <img class="img-fluid w-100" src="{{var.image2.url}} " alt="">
+                                </div> 
+                                <div class="form-outline mb-4">
+                                  <input name="image2" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                                </div>
+
+                                <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
+                                  <img class="img-fluid w-100" src="{{var.image3.url}} " alt="">
+                                </div> 
+                                <div class="form-outline mb-4">
+                                  <input name="image3" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                                </div>
+                                <div class="form-outline mb-4">
+                                  <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="product">
+                                    {% for b in prodect %}
+                                    <option value="{{b.id}}" >{{b.product_name}}</option>
+                                    {% endfor %}
+                                  </select>
+                                  <label class="form-label" for="form3Example3cg">Product</label>
+                                </div>
+                                <div class="form-outline mb-4">
+                                  <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="color">
+                                    {% for b in color %}
+                                    <option value="{{b.color}}" >{{b.color}}</option>
+                                    {% endfor %}
+                                  </select>
+                                  <label class="form-label" for="form3Example3cg">Color</label>
+                                </div>
+                                <div class="form-outline mb-4">
+                                  <input name='qty' value="{{var.quantity}}"  type="number" id="form3Example3cg" class="form-control form-control-lg" />
+                                  <label class="form-label" for="form3Example3cg">Quantity</label>
+                                </div>
+                               <div class="d-flex justify-content-center">
+                                  <button type="submit"
+                                    class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light mb-3" type="submit" >Save Changes</button>
+                                </div>
+                
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                       </div>
+
+                      <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal{{forloop.counter}}">
+                          Delete
+                        </button></td>
+
+                        <!-- Modal  for delete the product -->
+                        <div class="modal fade" id="exampleModal{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                Delete {{var.product }}--{{var.color}}
+                              </div>
+                              <div class="modal-footer">
+                                <form action="{%url 'deletevariations' var.id%}" >
+                                    
+                                  <button type="submit" class="btn btn-danger">Confirm</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                    </td>
+                    <!--deleting ended-->
+
+                 </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+
+            </div>
+
+          </div>
+        </div><!-- End Recent Sales -->
+          </div>
+        </div>
+      </div>
+
+      {% if message %}
+      <div class="message"><a href="{%url 'product'%}"><h1 class="font-weight-bold text-center pt-5" style="color: #403c3c52;font-weight: bold;">{{ message }}</h4> </a></div>
+     {% endif %}
+
+{% endblock  %}

@@ -1,0 +1,77 @@
+{% extends 'registration/regbase.html' %}
+{% block title %}Signup{% endblock title %}
+{% block body %}
+<style>
+.inputGroup {
+  margin-bottom: 20px;
+}
+form{
+	max-width: 482px;
+}
+.inputGroup2 label {
+  display: none;
+}
+
+.inputGroup2 input {
+  height: 30px;
+  padding: 5px;
+}
+
+.inputGroup3 button {
+  height: 65px;
+}
+
+.text-danger {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+	</style>
+<!-- partial:index.partial.html -->
+{% if otp %}
+<form class="row contact_form" action="{%url 'adminsignup'%}" method="post">
+	{% csrf_token %}
+{% if messages %}
+{% for message in messages %}
+<div class="text-center text-danger">
+  <strong>{{message}}</strong>
+</div>
+{% endfor %}
+{% endif %}
+<div class="inputGroup inputGroup2">
+	<input type="text" id="loginUsername" name="otp" placeholder="otp" required/>
+  </div>
+  <input  type="hidden" name="email" value="{{usr.email}}">
+<div class="inputGroup inputGroup3">
+  <button type="submit" id="login">Verify</button>
+</div>
+<a href="{% url 'adminsignup'%}" style="float: right; margin-top: 26px;text-decoration: none;">Return signup</a>
+</form>
+{% else %}
+<form class="row contact_form" action="{%url 'adminsignup'%}" method="post">
+	{% csrf_token %}
+	{% if messages %}
+	{% for message in messages %}
+	<div class="text-center text-danger">
+	  <strong>{{message}}</strong>
+	</div>
+	{% endfor %}
+	{% endif %}
+  
+	  <div class="inputGroup inputGroup2">
+		<input type="text" id="loginUsername" name="email" value="{{pre_email}}" placeholder="Email" />
+	  </div>
+	  <div class="inputGroup inputGroup2">
+		<input type="password" id="loginUsername" name="password1" value="" placeholder="Password" />
+	  </div>
+	  <div class="inputGroup inputGroup2">
+		<input type="password" id="loginUsername" name="password2" placeholder="Conform Password" />
+	  </div>
+  
+	<div class="inputGroup inputGroup3">
+	  <button type="submit" id="login">Log in</button>
+	</div>
+	<a href="{% url 'adminsignin'%}" style="float: right; margin-top: 26px;text-decoration: none;">Already have an account?</a>
+  </form>
+{% endif %}
+{% endblock %}

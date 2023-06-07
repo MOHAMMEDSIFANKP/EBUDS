@@ -1,0 +1,186 @@
+
+<html>
+<head>
+    <title>
+        My Order Track
+    </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+          integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link href=" https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+
+<style>
+      ul.progress-bar-1 {
+            height: 300px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+          }
+          ul.progress-bar-1::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 5px;
+            background: #777;
+            width: 5px;
+            height: 100vh;
+          }
+          ul.progress-bar-1 li {
+            background: #000;
+            border-radius: 100px;
+            width: 15px;
+            height: 15px;
+            z-index: 1;
+            position: relative;
+          }
+          ul.progress-bar-1 li.stop ~ li {
+            background: #777;
+          }
+          ul.progress-bar-1 li.stop ~ li::after {
+            height: 0;
+          }
+          ul.progress-bar-1 li::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 5px;
+            background: #000;
+            width: 5px;
+            height: 100vh;
+          }
+          
+          
+          /*
+          * Scut, a collection of Sass utilities
+          * to ease and improve our implementations of common style-code patterns.
+          * v1.3.0
+          * Docs at https://davidtheclark.github.io/scut
+          */
+          .ProgressBar {
+            margin: 0 auto;
+            padding: 2em 0 3em;
+            list-style: none;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+          }
+          
+          .ProgressBar-step {
+            text-align: center;
+            position: relative;
+            width: 100%;
+          }
+          .ProgressBar-step:before, .ProgressBar-step:after {
+            content: "";
+            height: 0.5em;
+            background-color: #9f9fa3;
+            position: absolute;
+            z-index: 1;
+            width: 100%;
+            left: -50%;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: all 0.25s ease-out;
+          }
+          .ProgressBar-step:first-child:before, .ProgressBar-step:first-child:after {
+            display: none;
+          }
+          .ProgressBar-step:after {
+            background-color: #00637c;
+            width: 0%;
+          }
+          .ProgressBar-step.is-complete + .ProgressBar-step.is-current:after, .ProgressBar-step.is-complete + .ProgressBar-step.is-complete:after {
+            width: 100%;
+          }
+          
+          .ProgressBar-icon {
+            width: 1.5em;
+            height: 1.5em;
+            background-color: #9f9fa3;
+            fill: #9f9fa3;
+            border-radius: 50%;
+            padding: 0.5em;
+            max-width: 100%;
+            z-index: 10;
+            position: relative;
+            transition: all 0.25s ease-out;
+          }
+          .is-current .ProgressBar-icon {
+            fill: #00637c;
+            background-color: #00637c;
+          }
+          .is-complete .ProgressBar-icon {
+            fill: #dbf1ff;
+            background-color: #00637c;
+          }
+          
+          .ProgressBar-stepLabel {
+            display: block;
+            text-transform: uppercase;
+            color: #9f9fa3;
+            position: absolute;
+            padding-top: 0.5em;
+            width: 100%;
+            transition: all 0.25s ease-out;
+          }
+
+          .is-current > .ProgressBar-stepLabel, .is-complete > .ProgressBar-stepLabel {
+            color: #00637c;
+          }
+          
+          .wrapper {
+            max-width: 1000px;
+            margin: 4em auto;
+            font-size: 16px;
+          }
+      </style>
+      <div class="content-wrapper">
+            <div class="row">
+                <div class="col-lg-12 grid-margin stretch-card">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                Track Order Status
+                            </h4>
+                            <p class="card-description">Dashboard <code>{{order.tracking_no}}</code></p>
+                            <hr/>
+                            <div class="table-responsive">
+                                <div class="wrapper">
+                                    <h4> Your Order Status</h4>
+                                    <ul class="ProgressBar">
+                                          {% for index, step in orderstatus %}
+                                          <li class="ProgressBar-step  {% if index <= trackIndex %}is-complete{% endif %}">
+                                              <svg class="ProgressBar-icon">
+                                                  <use xlink:href="#checkmark-bold"/>
+                                              </svg>
+                                              <span class="ProgressBar-stepLabel">{{ step }}</span>
+                                          </li>
+                                      {% endfor %}
+                                      
+                                      
+                                    </ul>
+                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg">
+                                    <symbol id="checkmark-bold" viewBox="0 0 24 24">
+                                        <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+                                    </symbol>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>

@@ -1,0 +1,529 @@
+{% extends 'user/base.html' %}
+{% block title %}User_Page{% endblock  %}
+{% block body %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'admin/css/styles.min.css'%}"/>
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="breadcrumb__text">
+                <h4>Shop</h4>
+                <div class="breadcrumb__links">
+                    <a href="{%url 'home'%}">Home</a>
+                    <span>Profile</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- Breadcrumb Section End -->
+<section>
+    <div class="container py-5">  
+      {% for m in messages  %}
+        <div class="alert alert-info" id="message" role="alert">
+          {{m}}
+        </div>
+      {% endfor %}
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card border rounded mb-4">
+            <div class="card-body   text-center">
+             <div class="text-center mb-2 container" style="width: 100px;height: 100px; border-radius: 50%;padding: 0; overflow: hidden;">
+              {% if request.user.user_image %}
+              <img class="img-fluid" src="{{request.user.user_image.url}}" alt="avatar"
+              class="rounded-circle img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                <img class="w-100 h-100" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                class="rounded-circle img-fluid">
+                {% endif %}
+             </div>
+             <a  data-bs-toggle="modal" data-bs-target="#changedp">
+              <button class="btn btn-outline-dark w-25 btn-hover" style="font-size: 10px;">Change</button>
+            </a>
+            <!--change profile Modal -->
+            <div class="modal fade" id="changedp" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="" id="exampleModalLabel">User Image</h5>
+                    <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                      <i class="fa fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form action="" enctype="multipart/form-data" method="POST">
+                      {% csrf_token %}
+      
+                      <div class="form-outline mb-4">
+                        <input name='user_image'   type="file" id="form3Example3cg" class="form-control form-control-lg" />
+                        <label class="form-label" for="form3Example3cg">User Image</label>
+                      </div>
+      
+                      <div class="d-flex justify-content-center">
+                        <button type="submit"
+                          class="btn btn-outline-dark btn-lg gradient-custom-4 w-50 text-light">Save Changes</button>
+                      </div>
+      
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+              <h5 class="my-3">
+                {{request.user.username}}
+             </h5>
+
+             <div class="row justify-content-between py-3">
+              <div class="col-sm-3">
+                <p class="mb-0">Wallet</p>
+                <a href="{%url 'orders'%}" class="btn btn-outline-dark ">Orders</a>
+              </div>
+              <div class="col-sm-6">
+                <p class="text-success mb-0 h5 text-end">
+                  ₹ {{wallets.wallet|floatformat:0}} 
+                  {{wallets.wallet}}
+                </p>
+              </div>
+            </div>
+            
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="card border rounded  mb-4"> 
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Full Name</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">
+                    {{request.user.username}}
+                  </p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">
+                    {{request.user.email}}
+                  </p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Mobile</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0">
+                    {% if request.user.phone %}
+                    {{request.user.phone}}
+                    {% else %}
+                    <tag class="text-danger">Not provided</tag> 
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+           <!-- Button trigger modal -->
+        <a type="button" data-bs-toggle="modal" data-bs-target="#editprofile">
+          <button class="btn btn-outline-dark"> Edit Profile </button>
+        </a>
+
+           <!-- Button trigger modal -->
+           <a type="button" data-bs-toggle="modal" data-bs-target="#changepassword">
+            <button class="btn btn-outline-dark"> Change Password </button>
+          </a>
+
+        <!--Edit Modal profile password edit -->
+        <div class="modal fade" id="changepassword" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="" id="exampleModalLabel">User password change</h5>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                  <i class="fa fa-times"></i>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="myForm"  action="{%url 'changepassword'%}" enctype="multipart/form-data" method="POST">
+                  {% csrf_token %}
+                  <div style="display: none;" class="alert alert-danger text-center changepassmessage" id="message" role="alert">
+                    
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input name='old_password'   type="password" id="form3Example3cg" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example3cg">old password</label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input name='new_password'   type="password" id="form3Example3cg" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example3cg">new password</label>
+                  </div>
+                  <div class="form-outline mb-4">
+                    <input name='confirm_new_password'   type="password" id="form3Example3cg" class="form-control form-control-lg" />
+                    <label class="form-label" for="form3Example3cg">confirm new password</label>
+                  </div>
+  
+                  <div class="d-flex justify-content-center">
+                    <button type="submit" onclick="submitForm(event)"
+                      class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light">Save Changes</button>
+                  </div>
+  
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       <!--Edit Profile Modal -->
+       <div class="modal fade" id="editprofile" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title fs-5" id="exampleModalLabel">Edit profile</h4>
+              <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fa fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="{%url 'editprofiles'%}" enctype="multipart/form-data" method="POST">
+                {% csrf_token %}
+                <div class="form-outline mb-4">
+                  <input value="{{user.username}}"  name='username'  type="text" id="id_usernam" class="form-control form-control-lg" />
+                  <label class="form-label" for="form3Example3cg">Username</label>
+                </div>  
+                <div class="form-outline mb-4">
+                  <input value="{{user.first_name}}"  name='first_name'  type="text" id="id_firstname" class="form-control form-control-lg" />
+                  <label class="form-label" for="form3Example3cg">First Name</label>
+                </div>  
+
+                <div class="form-outline mb-4">
+                  <input value="{{user.last_name}}"  name='last_name'  type="text" id="id_lasname" class="form-control form-control-lg" />
+                  <label class="form-label" for="form3Example3cg">Last Name</label>
+                </div>  
+
+                <div class="form-outline mb-4">
+                  <input readonly  name='email' value="{{user.email}}" type="email" id="form3Example3cg" class="form-control form-control-lg" />
+                  <label class="form-label" for="form3Example3cg">Email</label>
+                </div>
+                <div class="d-flex justify-content-center">
+                  <button type="submit"
+                    class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light">Save Changes</button>
+                </div>
+              </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+     {% if address %}
+    <h4 class="pt-5 pb-2">Your addresses</h4>
+    {% else %}
+    <h4 class="pt-5 pb-2">Add Your addresses</h4>
+    {% endif %}
+    <!-- New Address -->
+    <button type="button" class="site-btn mb-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      New Adress
+  </button>
+  
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="font-weight: bold;">Billing Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'addaddress' %}" method="POST" class="justify-content-between">
+          {% csrf_token %}
+          <div class="row mb-1">
+            <div class="col-lg-6">
+              <div class="checkout__input">
+                <p>First Name<span>*</span></p>
+                <input type="text" name="firstname" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="checkout__input">
+                <p>Last Name<span>*</span></p>
+                <input type="text" name="lastname" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="checkout__input mb-1">
+            <p>Country<span>*</span></p>
+            <input type="text" name="country" class="form-control">
+          </div>
+          <div class="checkout__input mb-1">
+            <p>Address<span>*</span></p>
+            <input type="text" class="checkout__input__add form-control" name="address">
+          </div>
+          <div class="checkout__input mb-1">
+            <p>Town/City<span>*</span></p>
+            <input type="text" name="city" class="form-control">
+          </div>
+          <div class="checkout__input mb-1">
+            <p>State<span>*</span></p>
+            <input type="text" name="state" class="form-control">
+          </div>
+          <div class="checkout__input mb-1">
+            <p>Postcode / ZIP<span>*</span></p>
+            <input type="text" name="pincode" class="form-control">
+          </div>
+          <div class="row mb-1">
+            <div class="col-lg-6">
+              <div class="checkout__input">
+                <p>Phone<span>*</span></p>
+                <input type="text" name="phone" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="checkout__input">
+                <p>Email<span>*</span></p>
+                <input type="text" name="email" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="checkout__input mb-1">
+            <p>Order notes<span>*</span></p>
+            <input type="text" placeholder="Notes about your order, e.g. special notes for delivery." name="ordernote" class="form-control">
+          </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-danger">Create New Address</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+    <!-- New Address -->
+      {% for a in address  %}
+        {% if not a.id == default.default.id %}
+          <div class="card border rounded  mb-3">
+            <div class="card-body">
+              <h5 class="card-title">{{a.first_name}} {{a.last_name}}</h5>
+              <p class="card-text">{{a.address}}, near {{a.state}}, </p>
+              <div>
+                <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#address{{forloop.counter}}">
+                    View
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="address{{forloop.counter}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title fs-6" id="staticBackdropLabel">View address</h4>
+                          <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.first_name}} {{ a.last_name}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.address}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Contact Number</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.phone}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.email}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">City</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.city}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Pincode</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.pincode}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">State</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.state}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Country</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ a.country}}
+                            </div>
+                          </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <a class="btn btn-outline-dark" href="">
+                  Edit
+                </a>
+                
+                <a  class="btn btn-danger text-black" data-bs-toggle="modal" data-bs-target="#deletaddress{{forloop.counter}}">
+                  delete
+                </a>
+    
+                <!--Delete Modal -->
+                <div class="modal fade" id="deletaddress{{forloop.counter}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="" id="exampleModalLabel">Delete</h5>
+                        <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close"> <i class="fa fa-times" ></i></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>Are you sure to delete Address <span class="text-primary">" {{a.first_name}} {{a.last_name}} ..."</span></p>
+                        <form action="{%url 'deleteaddress' a.id%}" enctype="multipart/form-data" method="POST">
+                          {% csrf_token %}
+                          <div class="d-flex justify-content-center">
+                            <button type="submit"
+                              class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light">Confirm</button>
+                          </div>
+          
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      
+
+      <br>
+      <br>
+
+    </div>
+  </section>
+
+  <script>
+{% comment %} 
+      const myTextField = document.getElementById("id_fullname");
+      myTextField.addEventListener("keypress", function(event) {
+        const key = event.key;
+        const isLetterOrSpace = /[a-zA-Z\s]/.test(key);
+        if (!isLetterOrSpace) {
+          event.preventDefault();
+        }
+      });
+
+      myTextField.addEventListener("paste", function(event) {
+        const pastedText = event.clipboardData.getData('text/plain');
+        const hasNumber = /\d/.test(pastedText);
+        if (hasNumber) {
+          event.preventDefault();
+        }
+      });
+
+
+
+    setTimeout(function(){
+            $('#message').fadeOut('slow')
+        }, 2000)
+
+        function submitForm(event) {
+    event.preventDefault(); // prevent form from submitting
+
+    var inputs = document.forms["myForm"].getElementsByTagName("input");
+    for (var i = 0; i < inputs.length; i++) {
+      if (inputs[i].value == "") {
+        alert("Please fill in all fields");
+        return false;
+      }
+    }
+    success: function(json){
+
+      if (json.status == 'true'){
+        window.location.reload()
+        return;
+      }
+
+      var messdiv = document.getElementById('message')
+      messdiv.style.display = "block";
+      messdiv.textContent = json.message
+
+    },
+
+    error: function(xhr, errmsg, err){
+
+
+    }
+
+    });
+
+    // All fields have values, submit the form
+  }
+  </script> {% endcomment %}
+  
+  {% endblock %}

@@ -1,0 +1,296 @@
+{% extends 'user/base.html' %}
+{% block title %}E-PODS{% endblock  %}
+{% block body %}
+{% load static %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"/>
+<link rel="stylesheet" href="{%static 'user/ncss/style.css'%}">
+        <!-- Hero Section Begin -->
+        <section class="hero">
+            <div class="hero__slider owl-carousel">
+                <div class="hero__items set-bg" data-setbg="{%static 'user/image/banner.jpg'%}">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-xl-5 col-lg-7 col-md-8">
+                                <div class="hero__text">
+                                    <h6>Summer Collection</h6>
+                                    <h2>Fall - Winter Collections 2030</h2>
+                                    <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
+                                    commitment to exceptional quality.</p>
+                                    <a href="#" class="primary-btn">Shop now <span class="arrow_right"></span></a>
+                                    <div class="hero__social">
+                                        <a href="#"><i class="fa fa-facebook"></i></a>
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                        <a href="#"><i class="fa fa-pinterest"></i></a>
+                                        <a href="#"><i class="fa fa-instagram"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <!-- Hero Section End -->
+    <!-- feature_part start-->
+    <section class="feature_part padding_top">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="section_tittle text-center">
+                        <h2>Featured Category</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row align-items-center justify-content-between">
+                {% for i in category %}
+                <div class="col-lg-3 col-sm-6">
+                    <div class="single_feature_post_text">
+                        <p>Premium Quality</p>
+                        <h3>{{i.categories}}</h3>
+                        <a href="{{i.get_url}}" class="feature_btn">EXPLORE NOW <i class="fas fa-play"></i></a>
+                        <img src="{{i.categories_image.url}}" alt="">
+                    </div>
+                </div>
+                {% endfor %}
+    </section>
+
+    <!-- upcoming_event part start-->
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <ul class="filter__controls">
+                        <li class="active" data-filter="*">Best Sellers</li>
+                        <li data-filter=".new-arrivals">New Arrivals</li>
+                        <li data-filter=".hot-sales">Hot Sales</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row product__filter">
+                {% for Variations in Variations %}
+                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg" data-setbg=""  style="background-color: #f3f2ee; border-radius: 5%; ">
+                            <a href="{%url 'single' Variations.id%}"><img src="{{Variations.image1.url}}" alt=""></a>
+                            <span class="label">New</span>
+                            <ul class="product__hover">
+                                <li><a href="#" class="addToWishlist" data-variantid="{{Variations.id}}" data-productid="{{Variations.product.id}}" ><img src="{%static 'user/image/icon/heart.png'%}" alt=""></a></li>
+                                <li><a href="#"><img src="{%static 'user/image/icon/compare.png'%}" alt=""> <span>Compare</span></a>
+                                </li>
+                                <li><a href="#"><img src="{%static 'user/image/icon/search.png'%}" alt=""></a></li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text product_data">
+                            <h6>{{Variations.product.product_name}}</h6>
+                            {% if Variations.quantity <= 0  %}
+                            <a href="" class="add-cart">Out of Stock</a>
+                            {% else %}
+                               <a href="" class="addToCartBtn">+ Add To Cart</a>
+                                <input type="hidden" value="{{Variations.product.id}}" class="prod_id" >
+                                <input type="hidden" value="{{Variations.id}}" class="var_id" >  
+                               {% endif %}
+                            <div class="rating">
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <h5>{{Variations.product.product_price}}</h5>
+                            <div class="product__color__select">
+                                <label for="pc-1">
+                                    <input type="radio" id="pc-1">
+                                </label>
+                                <label class="active black" for="pc-2">
+                                    <input type="radio" id="pc-2">
+                                </label>
+                                <label class="grey" for="pc-3">
+                                    <input type="radio" id="pc-3">
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
+
+    <!-- Categories Section Begin -->
+    <section class="categories spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="categories__text">
+                        <h2>Clothings Hot <br /> <span>Shoe Collection</span> <br /> Accessories</h2>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="categories__hot__deal">
+                        <img src="img/product-sale.png" alt="">
+                        <div class="hot__deal__sticker">
+                            <span>Sale Of</span>
+                            <h5>$29.99</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 offset-lg-1">
+                    <div class="categories__deal__countdown">
+                        <span>Deal Of The Week</span>
+                        <h2>Multi-pocket Chest Bag Black</h2>
+                        <div class="categories__deal__countdown__timer" id="countdown">
+                            <div class="cd-item">
+                                <span>3</span>
+                                <p>Days</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>1</span>
+                                <p>Hours</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>50</span>
+                                <p>Minutes</p>
+                            </div>
+                            <div class="cd-item">
+                                <span>18</span>
+                                <p>Seconds</p>
+                            </div>
+                        </div>
+                        <a href="#" class="primary-btn">Shop now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+
+    <!-- Instagram Section Begin -->
+    <section class="instagram spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="instagram__pic">
+                        <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-1.jpg"></div>
+                        <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-2.jpg"></div>
+                        <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-3.jpg"></div>
+                        <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-4.jpg"></div>
+                        <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-5.jpg"></div>
+                        <div class="instagram__pic__item set-bg" data-setbg="img/instagram/instagram-6.jpg"></div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="instagram__text">
+                        <h2>Instagram</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua.</p>
+                        <h3>#Male_Fashion</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Instagram Section End -->
+
+    <!-- Latest Blog Section Begin -->
+    <section class="latest spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <span>Latest News</span>
+                        <h2>Fashion New Trends</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-1.jpg"></div>
+                        <div class="blog__item__text">
+                            <span><img src="img/icon/calendar.png" alt=""> 16 February 2020</span>
+                            <h5>What Curling Irons Are The Best Ones</h5>
+                            <a href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-2.jpg"></div>
+                        <div class="blog__item__text">
+                            <span><img src="img/icon/calendar.png" alt=""> 21 February 2020</span>
+                            <h5>Eternity Bands Do Last Forever</h5>
+                            <a href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic set-bg" data-setbg="img/blog/blog-3.jpg"></div>
+                        <div class="blog__item__text">
+                            <span><img src="img/icon/calendar.png" alt=""> 28 February 2020</span>
+                            <h5>The Health Benefits Of Sunglasses</h5>
+                            <a href="#">Read More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Latest Blog Section End -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+<script>
+$('.addToCartBtn').click(function (e) {
+    e.preventDefault();
+
+    var variation_id = $(this).closest('.product_data').find('.var_id').val();
+    var prod_id = $(this).closest('.product_data').find('.prod_id').val();
+    var product_qty = 1;
+    $.ajax({
+        method: "POST",
+        url: "/cart/add_cart/",
+        data: {
+            'variation_id':variation_id,
+            'product_qty':product_qty,
+            'prod_id' : prod_id,
+            csrfmiddlewaretoken: '{{csrf_token }}'
+        },
+        success: function (response){
+            console.log(response)
+            alertify.success(response.status)
+            // $('.cartdata').load(location.href + " .cartdata");
+        }
+        
+    });
+});
+</script>
+<script>
+    $('.addToWishlist').click(function (e) {
+      e.preventDefault();
+
+    var variant_id = $(this).data('variantid');
+    var prod_id = $(this).data('productid');  
+    console.log(variant_id,'varid');
+    $.ajax({
+        method: "POST",
+        url: "/wishlist/add_wishlist/",
+        data: {
+          'variation_id':variant_id,
+          'prod_id' : prod_id,
+          csrfmiddlewaretoken: '{{csrf_token }}'
+        },
+        success: function (response){
+          console.log(response)
+          alertify.success(response.status)
+          $('.cartdata').load(location.href + " .cartdata");
+        }
+       
+      });
+  });
+</script>
+{% endblock  %}

@@ -1,0 +1,234 @@
+{% extends 'user/base.html' %}
+{% block title %}Cart{% endblock %}
+{% block body %}
+{% load static %}
+{% load mathfilters %}
+<link rel="stylesheet" type="text/css" href="{%static 'single/css/util.css'%}">
+<link rel="stylesheet" type="text/css" href="{%static 'single/css/main.css'%}">
+<!-- ajax -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"/>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+
+
+<!-- ajax end-->
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__text">
+                        <h4>Shopping Cart</h4>
+                        <div class="breadcrumb__links">
+                            <a href="{%url 'home'%}">Home</a>
+                            <a href="{%url 'shop'%}">Shop</a>
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+    <!-- Css Styles -->
+
+    <link rel="stylesheet" href="{%static 'cart/css/style.css'%}" type="text/css">
+
+    <!-- Shopping Cart Section Begin -->
+    <section class="shopping-cart spad">
+        <div class="container product_data cartdata">
+            <div class="row ">
+                <div class="col-lg-8 ">
+                    <div class="shopping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+
+                                    <th>Product</th>
+                                    <th></th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if not cart %}
+                                <h2 class="text-center font-weight-bold" style="color: #c5c1c1;" >Your Shoping Cart is Empty</h2>
+                                <br>
+                                <br>
+                                <br>
+                                {% else %}
+                                {% for item in cart %}
+                                <tr id="product-div{{item.variation.id}}" >
+                                        <td class="product_cart_item">
+                                            <div class="product_cart_item_pic ">
+                                                <img src="{{ item.variation.image1.url }}" height="90px" alt="IMG"  >
+                                            </div>
+                                        </td>
+                                        <td class="product_cart_item_text">
+                                            <h5 style="font-weight: bold;">{{ item.variation.product.product_name }}</h5>
+                                            <h5 style="font-weight: bold;">₹{{ item.variation.product.product_price }}</h5>
+                                        </td>                
+    
+    
+                                        <td>
+    
+                                            <div class="input-group quantity mx-auto " style="width: 100px;">
+                                                <div class="input-group-btn">
+                                                    <button data-price="{{item.variantion.price}}" data-variantid="{{item.variation.id}}" class="btn btn-sm border border-secondary btn-minus changeQuantity" >
+                                                        <i class="fa fa-minus"></i>
+                                                    </button>
+                                                </div>
+    
+                                                <input readonly id="pro_qty{{item.variation.id}}" type="text" class="form-control form-control-sm  text-center" value="{{item.product_qty}}">
+    
+                                                <div class="input-group-btn">
+                                                    <button data-price="{{item.variant.price}}" data-variantid="{{item.variation.id}}" class="btn btn-sm border border-secondary btn-plus changeQuantity">
+                                                        <i class="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+    
+                                        </td>
+                                        {% with counter=forloop.counter  %}
+                                        <td class="cart__price total">₹
+                                            <span id="single_product_total{{item.variation.id}}"> {{ item.product.product_price| mul:item.product_qty }} </span>
+                                        </td>
+                                        {% endwith %}
+                                        <td class="cart__close">
+                                            <a data-variantid="{{item.variation.id}}" class="delete-cart-item" href="" ><i class="fa fa-close"></i></a> 
+                                        </td>
+                                </tr>
+                                 
+                                {% endfor %}
+                                {% endif %}
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn">
+                                <a href="{%url 'shop'%}">Continue Shopping</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="continue__btn update__btn">
+                                <a href="{%url 'cart'%}"><i class="fa fa-spinner"></i> Update cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="cart__discount">
+                        <h6>Discount codes</h6>
+                        <form action="#">
+                            <input type="text" placeholder="Coupon code">
+                            <button type="submit">Apply</button>
+                        </form>
+                    </div>
+                    <div class="cart__total">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <li>Total Price ₹<span id="sub_total">{{total_price}}</span></li>
+                            <li>Tax ₹<span id="tax_field">{{tax}}</span></li>
+                            <li>Grand Total ₹<span id="grand_total">{{grand_total}}</span></li>
+                        </ul >
+                        {%if cart%}
+                        <a href="{%url 'checkout'%}" class="primary-btn">Proceed to checkout</a>
+                        {% else %}
+                        <a href="" class="primary-btn">Cart is Empty</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shopping Cart Section End -->
+
+<script>
+
+ $('.quantity button').on('click', function () {
+    var button = $(this);
+    var oldValue = button.parent().parent().find('input').val();
+    if (button.hasClass('btn-plus')) {
+        var newVal = parseFloat(oldValue) + 1;
+    } else {
+        if (oldValue > 1) {
+            var newVal = parseFloat(oldValue) - 1;
+        } else {
+            newVal = 1;
+        }
+    }
+    button.parent().parent().find('input').val(newVal);
+});
+
+$('.changeQuantity').click(function(e) {
+    e.preventDefault();
+    var variant_id = $(this).data('variantid')
+
+    var product_qty = $('#pro_qty' + variant_id).val() 
+
+    $.ajax({
+        method: "POST",
+        url: "update_cart/",
+        data: {
+            'variant_id': variant_id,
+            'product_qty': product_qty,
+            csrfmiddlewaretoken: '{{csrf_token}}'
+        },
+     
+        success: function(response) {
+            console.log(response);
+            alertify.success(response.status);
+            sub_total = parseInt(response.sub_total)
+            
+            document.getElementById('sub_total').textContent = sub_total
+            document.getElementById('tax_field').textContent = sub_total *0.18
+            document.getElementById('grand_total').textContent = sub_total + (sub_total *0.18)
+            document.getElementById('single_product_total'+variant_id).textContent = parseInt(response.product_price) * parseInt(response.quantity)
+            
+        }
+    });
+});
+</script>
+<script>
+$(document).ready(function() {
+    $(document).on('click', '.delete-cart-item', function(e) {
+        e.preventDefault();
+
+        var variant_id = $(this).data('variantid');
+        var token = $('input[name=csrfmiddlewaretoken]').val();
+
+        $.ajax({
+            method: "POST",
+            url: "/cart/delete-cart-item/",
+            data: {
+                'variant_id': variant_id,
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            success: function(response) {
+                alertify.success(response.status);
+                sub_total = parseInt(response.sub_total);
+                console.log(response);
+                document.getElementById('sub_total').textContent = sub_total;
+                document.getElementById('tax_field').textContent = sub_total * 0.18;
+                document.getElementById('grand_total').textContent = sub_total + (sub_total * 0.18);
+                $('.cartdata').load(location.href + " .cartdata");
+            }
+        });
+    });
+});
+</script>
+    
+
+
+<script src="{%static 'single/js/main.js'%}"></script>
+
+{% endblock %}

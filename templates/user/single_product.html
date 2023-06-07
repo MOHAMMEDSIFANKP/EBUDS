@@ -1,0 +1,861 @@
+{% extends 'user/base.html' %}
+{% block title %}Single_Product{% endblock %}
+{% block body %}
+{% load static %}
+    
+   <!--===============================================================================================-->	
+   <link rel="icon" type="image/png" href="images/icons/favicon.png"/>
+      <link rel="stylesheet" type="text/css" href="{%static 'single/vendor/select2/select2.min.css'%}">
+      <link rel="stylesheet" type="text/css" href="{%static 'single/vendor/slick/slick.css'%}">
+      <link rel="stylesheet" type="text/css" href="{%static 'single/css/util.css'%}">
+      <link rel="stylesheet" type="text/css" href="{%static 'single/css/main.css'%}">
+
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<!-- ajax -->
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css"/>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css"/>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+<!-- ajax end-->
+
+   <!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="breadcrumb__text">
+                <h4>Shop</h4>
+                <div class="breadcrumb__links">
+                    <a href="{%url 'home'%}">Home</a>
+                    <span>Single Product</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<!-- Breadcrumb Section End -->
+{% for m in messages  %}
+<div class="alert alert-info" id="message" role="alert">
+  {{m}}
+</div>
+
+{% endfor %}
+   <!-- Product Detail -->
+
+   <section class="sec-product-detail bg0 p-t-65 p-b-60">
+    <div class="container ">
+       <div class="row sifan product_data ">
+          <div class="col-md-6 col-lg-7 p-b-30">
+             <div class="p-l-25 p-r-30 p-lr-0-lg pt-5">
+                <div class="wrap-slick3 flex-sb flex-w">
+                   <div class="wrap-slick3-dots"></div>
+                   <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+                   <div class="slick3 gallery-lb ">
+                      <div class="item-slick3" id="thumb-image-1" data-thumb="{{variation.image1.url}} ">
+                         <div class="wrap-pic-w pos-relative ">
+                            <img id="product-image-1" src="{{variation.image1.url}}"  >
+
+                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" id="producnt-lg-image1" href="{{variation.image1.url}}">
+                               <i class="fa fa-expand"></i>
+                            </a>
+                         </div>
+                      </div>
+
+                      <div class="item-slick3" data-thumb="{{variation.image2.url}}">
+                         <div class="wrap-pic-w pos-relative ">
+                            <img id="product-image-2" src="{{variation.image2.url}}" alt="IMG-PRODUCT" >
+
+                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" id="producnt-lg-image2" href="{{variation.image2.url}}">
+                               <i class="fa fa-expand"></i>
+                            </a>
+                         </div>
+                      </div>
+
+                      <div class="item-slick3" data-thumb="{{variation.image3.url}}">
+                         <div class="wrap-pic-w pos-relative">
+                            <img id="product-image-3" src="{{variation.image3.url}}" alt="IMG-PRODUCT">
+
+                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" id="producnt-lg-image3" href="{{variation.image3.url}}">
+                               <i class="fa fa-expand"></i>
+                            </a>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div class="col-md-6 col-lg-5 p-b-30 pt-5">
+         
+
+             <div class="p-r-50 p-t-5 p-lr-0-lg ">
+                <h2 class="mtext-180 cl2 js-name-detail p-b-14" style="font-weight: bolder;">
+                   {{variation.product.product_name}}
+                   <a href=""  class="ml-5 addToWishlist"><img src="{%static 'user/image/icon/heart.png'%}" alt=""></a>
+
+                </h2>
+                  
+                <span class="mtext-106 cl2" style="font-weight: 700;">
+                  ₹{{variation.product.product_price}}
+                </span>
+
+                <p class="stext-102 cl3 p-t-23" style="font-size: larger;">
+                   Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus ligula. Mauris consequat ornare feugiat.
+                </p>
+                
+                <!--  -->
+                <div class="p-t-33">
+                   <div class="flex-w flex-r-m p-b-10">
+                      
+                      
+                   </div>
+
+                   <div class="flex-w flex-r-m p-b-10">
+                      <div class="size-203 flex-c-m respon6">
+                         Color
+                      </div>
+
+                      <div class="size-204 respon6-next">
+                         <div class="rs1-select2 bor8 bg0">
+                          
+                          {% csrf_token %}
+                          <select id="colorSelect" class="ChangeColor js-select2 ">
+                            {% for color in color %}
+                              {% if variation.color.id == color.id %}
+                              <option selected id="colors" value="{{color.id}}" name="color">{{color.color}}</option>
+                              {% else %}
+                              <option id="colors" value="{{color.id}}" name="color">{{color.color}}</option>
+                              {% endif %}
+                              {% endfor %}
+                          </select>
+                          
+                            <div class="dropDownSelect2"></div>
+                         </div>
+                      </div>
+                   </div>
+
+                   <div class="flex-w flex-r-m p-b-10">
+                 
+                      <div class="size-204 flex-w flex-m respon6-next">
+                         <div class="wrap-num-product flex-w m-r-20 ">
+                            <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
+                               <i class="fa fa-minus"></i>
+                            </div>
+
+                            <input class="form.control mtext-104 cl3 txt-center num-product qty-input" type="number" name="num-product " value="1">
+
+                            <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
+                               <i class="fa fa-plus"></i>
+                            </div>
+                         </div>
+                     
+                         <div class="cartdata">
+                         <input type="hidden" value="{{variation.product.id}}" class="prod_id" >
+                         <input type="hidden" value="{{variation.id}}" class="var_id" >
+                         <button type="submit" class="primary-btn addToCartBtn ms-auto mt-1" >{% if variation.quantity > 0  %}Add to cart {% else %}Out of stok{% endif %}</button>
+                                 
+                          </div>
+                          
+                      </div>                  
+                   </div>	
+                </div>
+
+                <!--  -->
+                <div class="flex-w flex-m p-l-100 p-t-40 respon7">
+                   <div class="flex-m bor9 p-r-10 m-r-11">
+                      <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 js-addwish-detail tooltip100" data-tooltip="Add to Wishlist">
+                      </a>
+                   </div>
+
+                   <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Facebook">
+                      <i class="fa fa-facebook"></i>
+                   </a>
+
+                   <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Twitter">
+                      <i class="fa fa-twitter"></i>
+                   </a>
+
+                   <a href="#" class="fs-14 cl3 hov-cl1 trans-04 lh-10 p-lr-5 p-tb-2 m-r-8 tooltip100" data-tooltip="Google Plus">
+                      <i class="fa fa-google-plus"></i>
+                   </a>
+                </div>
+             </div>
+          </div>
+       </div>
+<!--================Product Description Area =================-->
+<section class="product_description_area">
+<div class="container">
+<ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+      aria-selected="true">Description</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+      aria-selected="false">Specification</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact"
+      aria-selected="false">Comments</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" id="review-tab" data-toggle="tab" href="#review" role="tab" aria-controls="review"
+      aria-selected="false">Reviews</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
+    <p>
+      Beryl Cook is one of Britain’s most talented and amusing artists
+      .Beryl’s pictures feature women of all shapes and sizes enjoying
+      themselves .Born between the two world wars, Beryl Cook eventually
+      left Kendrick School in Reading at the age of 15, where she went
+      to secretarial school and then into an insurance office. After
+      moving to London and then Hampton, she eventually married her next
+      door neighbour from Reading, John Cook. He was an officer in the
+      Merchant Navy and after he left the sea in 1956, they bought a pub
+      for a year before John took a job in Southern Rhodesia with a
+      motor company. Beryl bought their young son a box of watercolours,
+      and when showing him how to use it, she decided that she herself
+      quite enjoyed painting. John subsequently bought her a child’s
+      painting set for her birthday and it was with this that she
+      produced her first significant work, a half-length portrait of a
+      dark-skinned lady with a vacant expression and large drooping
+      breasts. It was aptly named ‘Hangover’ by Beryl’s husband and
+    </p>
+    <p>
+      It is often frustrating to attempt to plan meals that are designed
+      for one. Despite this fact, we are seeing more and more recipe
+      books and Internet websites that are dedicated to the act of
+      cooking for one. Divorce and the death of spouses or grown
+      children leaving for college are all reasons that someone
+      accustomed to cooking for more than one would suddenly need to
+      learn how to adjust all the cooking practices utilized before into
+      a streamlined plan of cooking that is more efficient for one
+      person creating less
+    </p>
+  </div>
+  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+    <div class="table-responsive">
+      <table class="table">
+        <tbody>
+          <tr>
+            <td>
+              <h5>Width</h5>
+            </td>
+            <td>
+              <h5>128mm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Height</h5>
+            </td>
+            <td>
+              <h5>508mm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Depth</h5>
+            </td>
+            <td>
+              <h5>85mm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Weight</h5>
+            </td>
+            <td>
+              <h5>52gm</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Quality checking</h5>
+            </td>
+            <td>
+              <h5>yes</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Freshness Duration</h5>
+            </td>
+            <td>
+              <h5>03days</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>When packeting</h5>
+            </td>
+            <td>
+              <h5>Without touch of hand</h5>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <h5>Each Box contains</h5>
+            </td>
+            <td>
+              <h5>60pcs</h5>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="comment_list">
+          <div class="review_item">
+            <div class="media">
+              <div class="d-flex">
+                <img src="img/product/single-product/review-1.png" alt="" />
+              </div>
+              <div class="media-body">
+                <h4>Blake Ruiz</h4>
+                <h5>12th Feb, 2017 at 05:56 pm</h5>
+                <a class="reply_btn" href="#">Reply</a>
+              </div>
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </p>
+          </div>
+          <div class="review_item reply">
+            <div class="media">
+              <div class="d-flex">
+                <img src="img/product/single-product/review-2.png" alt="" />
+              </div>
+              <div class="media-body">
+                <h4>Blake Ruiz</h4>
+                <h5>12th Feb, 2017 at 05:56 pm</h5>
+                <a class="reply_btn" href="#">Reply</a>
+              </div>
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </p>
+          </div>
+          <div class="review_item">
+            <div class="media">
+              <div class="d-flex">
+                <img src="img/product/single-product/review-3.png" alt="" />
+              </div>
+              <div class="media-body">
+                <h4>Blake Ruiz</h4>
+                <h5>12th Feb, 2017 at 05:56 pm</h5>
+                <a class="reply_btn" href="#">Reply</a>
+              </div>
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="review_box">
+          <h4>Post a comment</h4>
+          <form class="row contact_form" action="contact_process.php" method="post" id="contactForm"
+            novalidate="novalidate">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" class="form-control" id="name" name="name" placeholder="Your Full name" />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email Address" />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" class="form-control" id="number" name="number" placeholder="Phone Number" />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <textarea class="form-control" name="message" id="message" rows="1"
+                  placeholder="Message"></textarea>
+              </div>
+            </div>
+            <div class="col-md-12 text-right">
+              <button type="submit" value="submit" class="btn_3">
+                Submit Now
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade show active" id="review" role="tabpanel" aria-labelledby="review-tab">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="row total_rate">
+          <div class="col-6">
+            <div class="box_total">
+              <h5>Overall</h5>
+              <h4>4.0</h4>
+              <h6>(03 Reviews)</h6>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="rating_list">
+              <h3>Based on 3 Reviews</h3>
+              <ul class="list">
+                <li>
+                  <a href="#">5 Star
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i> 01</a>
+                </li>
+                <li>
+                  <a href="#">4 Star
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i> 01</a>
+                </li>
+                <li>
+                  <a href="#">3 Star
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i> 01</a>
+                </li>
+                <li>
+                  <a href="#">2 Star
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i> 01</a>
+                </li>
+                <li>
+                  <a href="#">1 Star
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i> 01</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="review_list">
+          <div class="review_item">
+            <div class="media">
+              <div class="d-flex">
+                <img src="img/product/single-product/review-1.png" alt="" />
+              </div>
+              <div class="media-body">
+                <h4>Blake Ruiz</h4>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </div>
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </p>
+          </div>
+          <div class="review_item">
+            <div class="media">
+              <div class="d-flex">
+                <img src="img/product/single-product/review-2.png" alt="" />
+              </div>
+              <div class="media-body">
+                <h4>Blake Ruiz</h4>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </div>
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </p>
+          </div>
+          <div class="review_item">
+            <div class="media">
+              <div class="d-flex">
+                <img src="img/product/single-product/review-3.png" alt="" />
+              </div>
+              <div class="media-body">
+                <h4>Blake Ruiz</h4>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </div>
+            </div>
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+              sed do eiusmod tempor incididunt ut labore et dolore magna
+              aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+              ullamco laboris nisi ut aliquip ex ea commodo
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="review_box">
+          <h4>Add a Review</h4>
+          <p>Your Rating:</p>
+          <ul class="list">
+            <li>
+              <a href="#">
+                <i class="fa fa-star"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fa fa-star"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fa fa-star"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fa fa-star"></i>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <i class="fa fa-star"></i>
+              </a>
+            </li>
+          </ul>
+          <p>Outstanding</p>
+          <form class="row contact_form" action="contact_process.php" method="post" novalidate="novalidate">
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" class="form-control" name="name" placeholder="Your Full name" />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="email" class="form-control" name="email" placeholder="Email Address" />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <input type="text" class="form-control" name="number" placeholder="Phone Number" />
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <textarea class="form-control" name="message" rows="1" placeholder="Review"></textarea>
+              </div>
+            </div>
+            <div class="col-md-12 text-right">
+              <button type="submit" value="submit" class="btn_3">
+                Submit Now
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+<!--================End Product Description Area =================-->
+
+<!-- product_list part start-->
+<section class="product_list best_seller">
+<div class="container">
+<div class="row justify-content-center">
+  <div class="col-lg-12">
+    <div class="section_tittle text-center">
+      <h2>Best Sellers <span>shop</span></h2>
+    </div>
+  </div>
+</div>
+<div class="row align-items-center justify-content-between">
+  <div class="col-lg-12">
+    <div class="best_product_slider owl-carousel">
+      <div class="single_product_item">
+        <img src="img/product/product_1.png" alt="">
+        <div class="single_product_text">
+          <h4>Quartz Belt Watch</h4>
+          <h3>$150.00</h3>
+        </div>
+      </div>
+      <div class="single_product_item">
+        <img src="img/product/product_2.png" alt="">
+        <div class="single_product_text">
+          <h4>Quartz Belt Watch</h4>
+          <h3>$150.00</h3>
+        </div>
+      </div>
+      <div class="single_product_item">
+        <img src="img/product/product_3.png" alt="">
+        <div class="single_product_text">
+          <h4>Quartz Belt Watch</h4>
+          <h3>$150.00</h3>
+        </div>
+      </div>
+      <div class="single_product_item">
+        <img src="img/product/product_4.png" alt="">
+        <div class="single_product_text">
+          <h4>Quartz Belt Watch</h4>
+          <h3>$150.00</h3>
+        </div>
+      </div>
+      <div class="single_product_item">
+        <img src="img/product/product_5.png" alt="">
+        <div class="single_product_text">
+          <h4>Quartz Belt Watch</h4>
+          <h3>$150.00</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+<!-- product_list part end-->
+
+<!--===============================================================================================-->	
+<script src="{%static 'single/vendor/jquery/jquery-3.2.1.min.js'%}"></script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/animsition/js/animsition.min.js'%}"></script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/bootstrap/js/popper.js'%}"></script>
+ <script src="{%static 'single/vendor/bootstrap/js/bootstrap.min.js'%}"></script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/select2/select2.min.js'%}"></script>
+ <script>
+    $(".js-select2").each(function(){
+       $(this).select2({
+          minimumResultsForSearch: 20,
+          dropdownParent: $(this).next('.dropDownSelect2')
+       });
+    })
+ </script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/daterangepicker/moment.min.js'%}"></script>
+ <script src="{%static 'single/vendor/daterangepicker/daterangepicker.js'%}"></script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/slick/slick.min.js'%}"></script>
+ <script src="{%static 'single/js/slick-custom.js'%}"></script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/parallax100/parallax100.js'%}"></script>
+ <script>
+      $('.parallax100').parallax100();
+ </script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/MagnificPopup/jquery.magnific-popup.min.js'%}"></script>
+ <script>
+    $('.gallery-lb').each(function() { // the containers for all your galleries
+       $(this).magnificPopup({
+            delegate: 'a', // the selector for gallery item
+            type: 'image',
+            gallery: {
+               enabled:true
+            },
+            mainClass: 'mfp-fade'
+        });
+    });
+ </script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/isotope/isotope.pkgd.min.js'%}"></script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/sweetalert/sweetalert.min.js'%}"></script>
+ <script>
+    $('.js-addwish-b2, .js-addwish-detail').on('click', function(e){
+       e.preventDefault();
+    });
+
+    $('.js-addwish-b2').each(function(){
+       var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+       $(this).on('click', function(){
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass('js-addedwish-b2');
+          $(this).off('click');
+       });
+    });
+
+    $('.js-addwish-detail').each(function(){
+       var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+       $(this).on('click', function(){
+          swal(nameProduct, "is added to wishlist !", "success");
+
+          $(this).addClass('js-addedwish-detail');
+          $(this).off('click');
+       });
+    });
+
+    /---------------------------------------------/
+
+    $('.js-addcart-detail').each(function(){
+       var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+       $(this).on('click', function(){
+          swal(nameProduct, "is added to cart !", "success");
+       });
+    });
+ 
+ </script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/vendor/perfect-scrollbar/perfect-scrollbar.min.js'%}"></script>
+ <script>
+    $('.js-pscroll').each(function(){
+       $(this).css('position','relative');
+       $(this).css('overflow','hidden');
+       var ps = new PerfectScrollbar(this, {
+          wheelSpeed: 1,
+          scrollingThreshold: 1000,
+          wheelPropagation: false,
+       });
+
+       $(window).on('resize', function(){
+          ps.update();
+       })
+    });
+
+
+ </script>
+ <script>
+      $('.addToCartBtn').click(function (e) {
+        e.preventDefault();prod_id
+
+        var variation_id = $(this).closest('.product_data').find('.var_id').val();
+        var prod_id = $(this).closest('.product_data').find('.prod_id').val();
+        var product_qty = $(this).closest('.product_data').find('.qty-input').val();
+        $.ajax({
+          method: "POST",
+          url: "/cart/add_cart/",
+          data: {
+            'variation_id':variation_id,
+            'product_qty':product_qty,
+            'prod_id' : prod_id,
+            csrfmiddlewaretoken: '{{csrf_token }}'
+          },
+          success: function (response){
+            console.log(response)
+            alertify.success(response.status)
+            $('.cartdata').load(location.href + " .cartdata");
+          }
+         
+        });
+    });
+ </script>
+<script>
+$('.ChangeColor').change(function (e) {
+  e.preventDefault();
+
+  var color_id = $(this).val();  // Get the selected value from the dropdown
+  var var_id = $(this).closest('.product_data').find('.var_id').val();
+  var prod_id = $(this).closest('.product_data').find('.prod_id').val();
+  var token = $('input[name=csrfmiddlewaretoken]').val();
+  $.ajax({
+    method: "POST",
+    url: "/shop/Productdetalis/"+var_id+"/",
+    data: {
+      'colors': color_id,
+      'prod_id' : prod_id,
+      'csrfmiddlewaretoken': token
+    },
+    success: function(response) {
+            console.log(response);
+            alertify.success(response.status);
+            var variant_id = response.variation_id
+            console.log(variant_id);
+            var var_d = document.getElementsByClassName('var_id')[0].value = variant_id
+            console.log('new varid = ',var_d)
+
+            imageElement = document.getElementById('product-image-1')  
+            imageElement2 = document.getElementById('product-image-2')
+            imageElement3 = document.getElementById('product-image-3')   
+
+            {% for variant in variation_list %}
+
+              if({{variant.id}} == variant_id){
+                imageElement.src = '{{variant.image1.url}}'
+                imageElement2.src = '{{variant.image2.url}}'
+                imageElement3.src = '{{variant.image3.url}}'
+
+              $("#producnt-lg-image1").attr('href','{{variant.image1.url}}')
+              $("#producnt-lg-image2").attr('href','{{variant.image2.url}}')
+              $("#producnt-lg-image3").attr('href','{{variant.image3.url}}')
+
+
+              }
+            {% endfor %}
+               
+        }
+  });
+});
+
+
+</script>
+
+  <script>
+    $('.addToWishlist').click(function (e) {
+      e.preventDefault();
+
+      var variation_id = $(this).closest('.product_data').find('.var_id').val();
+      var prod_id = $(this).closest('.product_data').find('.prod_id').val();
+      $.ajax({
+        method: "POST",
+        url: "/wishlist/add_wishlist/",
+        data: {
+          'variation_id':variation_id,
+          'prod_id' : prod_id,
+          csrfmiddlewaretoken: '{{csrf_token }}'
+        },
+        success: function (response){
+          console.log(response)
+          alertify.success(response.status)
+          $('.cartdata').load(location.href + " .cartdata");
+        }
+       
+      });
+  });
+</script>
+<!--===============================================================================================-->
+ <script src="{%static 'single/js/main.js'%}"></script>
+
+
+ 
+{% endblock %}
