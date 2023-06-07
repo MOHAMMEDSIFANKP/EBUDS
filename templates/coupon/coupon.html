@@ -3,7 +3,7 @@
 {% block body %}
 <!-- Button trigger modal -->
 <a type="button" class="btn btn-secondary w-60" style="margin-top: 80px;margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#addCategory">
-  <i title="Add Brand" class="fa fa-plus">Add Brand</i>
+  <i title="Add Coupon" class="fa fa-plus">Add Coupon</i>
 </a>
 {% if messages %}
 
@@ -15,7 +15,7 @@
 {% endfor %}
 {% endif %}
 
-<!--Add Brand  Modal -->
+<!--Add Coupon  Modal -->
 <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog">
   <div class="modal-content">
@@ -25,24 +25,32 @@
       </div>
       <div class="modal-body">
 
-      <form action="{% url 'createbrands'%}"  enctype="multipart/form-data" method="POST">
+      <form action="{% url 'addcoupon'%}"  enctype="multipart/form-data" method="POST">
         {% csrf_token %}
-        <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
-        </div> 
+     
         <div class="form-outline mb-4">
-          <input name="brand_image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+          <input name='coupon_code' type="text" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">Coupon code</label>
         </div>
         <div class="form-outline mb-4">
-          <input name='brand_name' type="text" id="form3Example3cg" class="form-control form-control-lg" />
-          <label class="form-label" for="form3Example3cg">Brand name</label>
-        </div>
-        <div class="form-outline mb-4">
-            <input name='brand_address'   type="text" id="form3Example3cg" class="form-control form-control-lg" />
-            <label class="form-label" for="form3Example3cg">Address</label>
+            <input name='discount'   type="number" id="form3Example3cg" class="form-control form-control-lg" />
+            <label class="form-label" for="form3Example3cg">Discount</label>
           </div>
       <div class="form-outline mb-4">
-        <input name='brand_discription'   type="text" id="form3Example3cg" class="form-control form-control-lg" />
-        <label class="form-label" for="form3Example3cg">Brand Discription</label>
+        <input name='min_value'   type="number" id="form3Example3cg" class="form-control form-control-lg" />
+        <label class="form-label" for="form3Example3cg">Min value</label>
+      </div>
+      <div class="form-outline mb-4">
+        <input name='valid_from' type="date" id="formValidFrom" class="form-control form-control-lg" />
+        <label class="form-label" for="formValidFrom">Valid from</label>
+      </div>
+      <div class="form-outline mb-4">
+        <input name='valid_till' type="date" id="formValidTill" class="form-control form-control-lg" />
+        <label class="form-label" for="formValidTill">Valid till</label>
+      </div>
+      <div class="form-outline mb-4">
+        <input name='checkbox'   type="checkbox" />
+        <label class="form-label" for="form3Example3cg">Active</label>
       </div>
        <div class="d-flex justify-content-center">
           <button type="submit"
@@ -53,16 +61,16 @@
   </div>
 </div>
 </div>
-<!--end of add Brand modal-->
+<!--end of add Coupon modal-->
 
 <div class="pagetitle pt-3 ps-5">
   <div class="shop__sidebar__search me-4" style="float: right;">
-    <form action="{%url 'search_brand'%}">
+    <form action="{%url 'search_coupon'%}">
       <input type="text" placeholder="Search..." name="keyword" style="border-radius: 20px; height: 40px; text-align: center; font-size: 16px;">
       <button type="submit"><span class="icon_search"></span></button>
     </form>
   </div>
-  <h1 style="font-weight: bold;">Brand</h1>
+  <h1 style="font-weight: bold;">Coupon</h1>
 </div><!-- End Page Title -->
 
 <section class="section dashboard">
@@ -83,8 +91,9 @@
                     <th scope="col">Coupon code</th>
                     <th scope="col">Discount</th>
                     <th scope="col">Min value</th>
+                    <th scope="col">Valid from</th>
                     <th scope="col">Valid till</th>
-                    <th scope="col">BActive</th>
+                    <th scope="col">Active</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -93,14 +102,11 @@
 
                   <tr>
                     <td>  {{c.coupon_code}}  </td>
-                    <td>
-                      <div style="width: 60px;" class="overflow-hidden">
-                        <img class="w-100" src=" {{c.brand_image.url}} " alt="">
-                      </div>
-                    </td>
-                    <td>  {{c.brand_name}} </td>
-                    <td>  {{c.brand_address}} </td>
-                    <td>  {{c.brand_discription}} </td>
+                    <td>{{c.discount}}%</td>
+                    <td>  {{c.min_value}} </td>
+                    <td>  {{c.valid_from}} </td>
+                    <td>  {{c.valid_till}} </td>
+                    <td> {{c.active}}</td>
                     <!-- edit -->
                     <td>
                       <!-- Button trigger modal -->
@@ -113,32 +119,36 @@
 
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Brand</h1>
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Coupon</h1>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                              <form  method="POST" action="{% url 'editbrands' c.id %}"  enctype="multipart/form-data">
+                              <form  method="POST" action="{% url 'edicoupon' c.id %}"  enctype="multipart/form-data">
                                 {% csrf_token %}
   
-                                <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
-                                  <img class="img-fluid w-100" src="{{c.brand_image.url}} " alt="">
-                                </div> 
-                
                                 <div class="form-outline mb-4">
-                                  <input name="brand_image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
-                                </div>
-
-                                <div class="form-outline mb-4">
-                                  <input name='brand_name' value="{{c.brand_name}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
-                                  <label class="form-label" for="form3Example3cg">Category name</label>
+                                  <input name='coupon_code' type="text" id="form3Example3cg" class="form-control form-control-lg" value="{{c.coupon_code}}"/>
+                                  <label class="form-label" for="form3Example3cg">Coupon code</label>
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <input name='brand_address' value="{{c.brand_address}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
-                                    <label class="form-label" for="form3Example3cg">Address</label>
+                                    <input name='discount'   type="number" id="form3Example3cg" class="form-control form-control-lg" value="{{c.discount}}"/>
+                                    <label class="form-label" for="form3Example3cg">Discount</label>
                                   </div>
                               <div class="form-outline mb-4">
-                                <input name='brand_discription' value="{{c.brand_discription}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
-                                <label class="form-label" for="form3Example3cg">Discription</label>
+                                <input name='min_value'   type="number" id="form3Example3cg" class="form-control form-control-lg" value="{{c.min_value}}"/>
+                                <label class="form-label" for="form3Example3cg">Min value</label>
+                              </div>
+                              <div class="form-outline mb-4">
+                                <input name='valid_from' type="date" id="formValidFrom" class="form-control form-control-lg" value="{{c.valid_from}}"/>
+                                <label class="form-label" for="formValidFrom">Valid from</label>
+                              </div>
+                              <div class="form-outline mb-4">
+                                <input name='valid_till' type="date" id="formValidTill" class="form-control form-control-lg" value="{{c.valid_till}}"/>
+                                <label class="form-label" for="formValidTill">Valid till</label>
+                              </div>
+                              <div class="form-outline mb-4">
+                                <input name='checkbox'   type="checkbox" />
+                                <label class="form-label" for="form3Example3cg">Active</label>
                               </div>
                                <div class="d-flex justify-content-center">
                                   <button type="submit"
@@ -166,10 +176,10 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body">
-                                delete Product {{c.brand_name }}
+                                delete Coupn {{c.coupon_code}} 
                               </div>
                               <div class="modal-footer">
-                                <form action="{% url 'deletebrands' c.id %}" >
+                                <form action="{% url 'deletecoupon' c.id %}" >
                                     
                                   <button type="submit" class="btn btn-danger">Confirm</button>
                                 </form>
@@ -195,7 +205,7 @@
         </div>
       </div>
       {% if message %}
-      <div class="message"><a href="{%url 'brands'%}"><h1 class="font-weight-bold text-center pt-5" style="color: #403c3c52;font-weight: bold;">{{ message }}</h4> </a></div>
+      <div class="message"><a href="{%url 'admincoupon'%}"><h1 class="font-weight-bold text-center pt-5" style="color: #403c3c52;font-weight: bold;">{{ message }}</h4> </a></div>
      {% endif %}
 
 
