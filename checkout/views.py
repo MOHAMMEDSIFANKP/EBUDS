@@ -2,7 +2,7 @@ from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from carts.models import Cart
-from userprofile.models import Address
+from userprofile.models import Address, Wallet
 from django.contrib import messages
 from product.models import Product, Variations
 from checkout.models import Order, OrderItem
@@ -61,6 +61,15 @@ def placeorder(request):
         for item in cart:
             cart_total_price += item.product.product_price * item.product_qty
 
+        payment = request.POST.get('payment_method')
+        if (payment == "wallet"):
+            wallet = Wallet.objects.get(user = request.user)
+            if wallet.wallet >=cart_total_price:
+                wallet.wallet = wallet.wallet-cart_total_price
+                wallet.save()
+            else:
+                messages.error(request,'Your wallet amount is very low')
+                return redirect('checkout') 
         if Usercoupon.objects.filter(user = request.user).exists():
             usercoupon = Usercoupon.objects.get(user = request.user)
             neworder.total_price = usercoupon.total_price

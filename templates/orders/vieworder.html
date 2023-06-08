@@ -40,7 +40,13 @@
             <span style="color:#605656;font-weight: 500;font-size: 30px;">Thank you. Your order has been received.</span>
           </div>
         </div>
-       
+        <div class="text-center text-danger">
+          {% if messages %}
+              {% for message in messages %}
+                  <strong>{{ message }}</strong>
+              {% endfor %}
+          {% endif %}
+      </div>
                 
         <div class="col-lg-6 col-lx-4">
           <div class="card border rounded  mb-3">

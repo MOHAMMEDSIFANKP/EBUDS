@@ -81,8 +81,6 @@ def orderreturn(request,return_id):
             messages.error(request, "The specified OrderItem does not exist.")
             return redirect('orders')
         qty = orderitem_id.quantity
-        orderitem_id.quantity = 0
-        orderitem_id.price = 0
         pid = orderitem_id.variation.id
         order_id = Order.objects.get(id = orderitem_id.order.id)
         variation = Variations.objects.filter(id=pid).first()
@@ -90,6 +88,7 @@ def orderreturn(request,return_id):
         variation.save()
         orderitem_id.status = 'Return'
         total_p = orderitem_id.price
+        print(total_p)
         orderitem_id.save()
         returnorder = Orderreturn.objects.create(user = request.user, order = order_id, options=options, reason=reason)
         try:
@@ -98,6 +97,9 @@ def orderreturn(request,return_id):
             wallet.save()
         except Wallet.DoesNotExist:
             wallet = Wallet.objects.create(user=request.user, wallet=total_p)
+        orderitem_id.quantity = 0
+        orderitem_id.price = 0
+        orderitem_id.save()
         return redirect('vieworderdetail',return_id)
 
 # Admin side Order View

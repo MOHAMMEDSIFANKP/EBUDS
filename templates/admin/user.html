@@ -51,12 +51,15 @@
                             <td> {{user.first_name}} </td>
                             <td> {{user.last_name}} </td>
                             <td> {{user.email}} </td>
+                            {%if user.is_superuser%}
+                            {% else %}
                                 {%if user.is_active%}
                                 <td>Active</td>
                                 <td><a class="btn btn-primary me-2" href="{% url 'blockuser' user.id%}" role="button">blockuser</a></td>
                                 {% else %}
                                 <td>Non Active</td>
                                 <td> <a class="btn btn-danger" href="{% url 'blockuser' user.id%}" role="button">Unblockuser</a></td>
+                                {% endif %}
                                 {% endif %}
                         </tr>
                         {% endfor %}
