@@ -17,7 +17,7 @@ class Address(models.Model):
     order_note = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
-        return self.last_name
+        return f"{self.id}"
     
 class Wallet(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)

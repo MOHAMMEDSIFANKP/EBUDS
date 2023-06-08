@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from checkout.models import Order, OrderItem
 from product.models import Product, Variations
-from userprofile.models import Wallet
+from .models import Orderreturn
+from userprofile.models import Wallet, Address
 from django.http.response import JsonResponse
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 
@@ -46,10 +49,56 @@ def ordercancel(request):
     variation.quantity = variation.quantity + qty
     variation.save()
     orderitem.quantity = 0
+    orderitem.status = 'Cancelled'
     orderitem.save()
-    order.status = 'Cancelled'
-    order.save()
     return redirect('orders')
+
+def vieworderdetail(request,orderitem_id):
+    try:
+        order_item = OrderItem.objects.get(id=orderitem_id)
+    except OrderItem.DoesNotExist:
+        messages.error(request, "The specified OrderItem does not exist.")
+        return redirect('orders')
+    address = int(order_item.order.address.id)
+    cotext = {
+        'address': Address.objects.get(id=address),
+        'order_item' : order_item,
+    }
+    return render(request, 'orders/vieworder.html',cotext)
+
+def orderreturn(request,return_id):
+    if request.method == 'POST':
+        print(return_id,'daxo')
+        options = request.POST.get('options')
+        reason = request.POST.get('reason')
+# validation
+        if options.strip() == '':
+            messages.error(request, "enter valid Options")
+            return redirect('vieworderdetail')
+        try:
+            orderitem_id = OrderItem.objects.get(id=return_id)
+        except OrderItem.DoesNotExist:
+            messages.error(request, "The specified OrderItem does not exist.")
+            return redirect('orders')
+        qty = orderitem_id.quantity
+        orderitem_id.quantity = 0
+        orderitem_id.price = 0
+        pid = orderitem_id.variation.id
+        order_id = Order.objects.get(id = orderitem_id.order.id)
+        variation = Variations.objects.filter(id=pid).first()
+        variation.quantity = variation.quantity + qty
+        variation.save()
+        orderitem_id.status = 'Return'
+        total_p = orderitem_id.price
+        orderitem_id.save()
+        returnorder = Orderreturn.objects.create(user = request.user, order = order_id, options=options, reason=reason)
+        try:
+            wallet = Wallet.objects.get(user=request.user)
+            wallet.wallet += total_p
+            wallet.save()
+        except Wallet.DoesNotExist:
+            wallet = Wallet.objects.create(user=request.user, wallet=total_p)
+        return redirect('vieworderdetail',return_id)
 
 # Admin side Order View
 def orderdetails(request):
@@ -63,11 +112,12 @@ def orderdetails(request):
 
 # Admin side Order satus change
 def changestatus(request):
-    order_id = request.POST.get('order_id')
+    orderitem_id = request.POST.get('orderitem_id')
     order_status = request.POST.get('order_status')
-    order = Order.objects.get(id = order_id)
-    order.status = order_status
-    order.save()
+    orderitems = OrderItem.objects.get(id = orderitem_id)
+
+    orderitems.status = order_status
+    orderitems.save()
     return JsonResponse({'status': "Updated"+ str(order_status) + "successfully"}) 
 
 def trackorder(request):
@@ -94,7 +144,6 @@ def trackorder(request):
     # }
     
     return render(request, 'orders/trackorder.html')
-
 
 # admin side order search
 def search_orders(request):

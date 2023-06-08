@@ -65,24 +65,24 @@
                           </td>
                           <td>{{odritem.order.payment_mode}}</td>
                           <td>{{odritem.order.tracking_no}}</td>
-                          <td >{% if odritem.order.status == 'Pending' %}
-                            <span class="badge p-2 my-2 text-secondary" style="font-size: medium;">{{odritem.order.status}}</span>
-                            {% elif odritem.order.status == 'Processing' %}
-                            <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{odritem.order.status}}</span>
-                            {% elif odritem.order.status == 'Shipped' %}
-                            <span class="badge p-2 my-2 text-primary" style="font-size: medium;">{{odritem.order.status}}</span>
-                            {% elif odritem.order.status == 'Delivered' %}
-                            <span class="badge p-2 my-2 tet-success" style="font-size: medium;">{{odritem.order.status}}</span>
-                            {% elif odritem.order.status == 'Cancelled' or 'refunded' %}
-                            <span class="badge p-2 my-2 text-danger" style="font-size: medium;">{{odritem.order.status}}</span>
+                          <td >{% if odritem.status == 'Pending' %}
+                            <span class="badge p-2 my-2 text-secondary" style="font-size: medium;">{{odritem.status}}</span>
+                            {% elif odritem.status == 'Processing' %}
+                            <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{odritem.status}}</span>
+                            {% elif odritem.status == 'Shipped' %}
+                            <span class="badge p-2 my-2 text-primary" style="font-size: medium;">{{odritem.status}}</span>
+                            {% elif odritem.status == 'Delivered' %}
+                            <span class="badge p-2 my-2 text-success" style="font-size: medium;">{{odritem.status}}</span>
+                            {% elif odritem.status == 'Cancelled' or 'refunded' %}
+                            <span class="badge p-2 my-2 text-danger" style="font-size: medium;">{{odritem.status}}</span>
                             {% endif %}
                         </td>
-                        <input type="hidden" class="order_id" value="{{odritem.order.id}}">
+                        <input type="hidden" class="orderitem_id" value="{{odritem.id}}">
                         <td>
                           <div class="form-outline mb-4">
                             <select class="form-select form-select-sm mt-3 changestatus status" aria-label=".form-select-sm example" name="status">
-                              {% for choice in odritem.order.orderstatuses %}
-                                {% if odritem.order.status == choice.0 %}
+                              {% for choice in odritem.orderstatuses %}
+                                {% if odritem.status == choice.0 %}
                                   <option selected value="{{ choice.0 }}">{{ choice.1 }}</option>
                                 {% else %}
                                   <option value="{{ choice.0 }}">{{ choice.1 }}</option>
@@ -112,16 +112,16 @@ $(document).ready(function() {
   $(document).on('click', '.changestatus', function(e) {
     e.preventDefault();
 
-    var order_ids = $(this).closest('.product_data').find('.order_id').val();
+    var orderitem_id = $(this).closest('.product_data').find('.orderitem_id').val();
     var status = $(this).val();
-    console.log(order_ids);
+    console.log(orderitem_id);
     console.log(status);
 
     $.ajax({
         method: "POST",
         url: "/orders/changestatus/",
         data: {
-        'order_id': order_ids,
+        'orderitem_id': orderitem_id,
         'order_status': status,
         csrfmiddlewaretoken: '{{ csrf_token }}'
         },

@@ -8,6 +8,8 @@ urlpatterns = [
     path('orderdetails/', views.orderdetails, name='orderdetails'),
     path('changestatus/', views.changestatus, name='changestatus'),
     path('trackorder/', views.trackorder, name='trackorder'),
+    path('vieworderdetail/<int:orderitem_id>/', views.vieworderdetail, name='vieworderdetail'),
+    path('orderreturn/<int:return_id>/', views.orderreturn, name='orderreturn'),
     # re_path(r'^myorders/user-order-track/(?P<order_id>[\w\-]+)/$', views.user_order_track, name='user_order_track'),
     path('search_orders/', views.search_orders, name='search_orders'),
     

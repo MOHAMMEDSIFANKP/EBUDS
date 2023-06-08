@@ -1,0 +1,349 @@
+{% extends 'user/base.html' %}
+{% block title %}Orders view{% endblock %}
+{% block body %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'admin/css/styles.min.css'%}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<!-- ajax -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
+<!-- ajax end-->
+  <!-- style CSS -->
+
+  <!--================Home Banner Area =================-->
+  <!-- breadcrumb start-->
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12">
+              <div class="breadcrumb__text">
+                  <h4>Shopping Cart</h4>
+                  <div class="breadcrumb__links">
+                      <a href="{%url 'home'%}">Home</a>
+                      <a href="{%url 'shop'%}">Shop</a>
+                      <span>Orders view</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+  <!--================ confirmation part start =================-->
+  <section class="confirmation_part padding_top cartdata">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="confirmation_tittle m-3 text-center">
+            <span style="color:#605656;font-weight: 500;font-size: 30px;">Thank you. Your order has been received.</span>
+          </div>
+        </div>
+       
+                
+        <div class="col-lg-6 col-lx-4">
+          <div class="card border rounded  mb-3">
+            <div class="card-body">
+              <h5 class="card-title" style="font-weight: bold;">{{address.first_name}} {{address.last_name}}</h5>
+              <p class="card-text">{{address.address}},{{address.city}},{{address.state}} </p>
+              <div>
+                <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#address{{forloop.counter}}">
+                    View
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="address{{forloop.counter}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title fs-6" id="staticBackdropLabel">View address</h4>
+                          <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.first_name}} {{ address.last_name}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.address}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Contact Number</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.phone}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.email}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">City</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.city}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Pincode</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.pincode}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">State</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.state}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Country</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.country}}
+                            </div>
+                          </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-lx-4">
+          <div class="card border rounded  mb-3">
+            <div class="card-body">
+              <h5 class="card-title" style="font-weight: bold;">ORDER INFO</h5>
+              <h5 class="card-text">Tracking No<span> : {{order_item.order.tracking_no}}</span></p>
+              <h5 class="card-text">Order Date<span> : {{order_item.order.created_at}}</span></p>
+              <h5 class="card-text">Payment Method<span> : {{order_item.order.payment_mode}}</span></p>
+              
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="card border rounded  mb-3">
+            
+        <table class="product_data m-4">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Name & Price</th>
+              <th>Color</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td class="product_cart_item">
+                <div class="product_cart_item_pic">
+                  <img src="{{ order_item.variation.image1.url }}" height="90px" alt="IMG">
+                </div>
+              </td>
+              <td class="product_cart_item_text">
+                <h5 style="font-weight: bold;">{{ order_item.product.product_name }}</h5>
+                <h5 style="font-weight: bold;">₹{{ order_item.product.product_price }}</h5>
+              </td>
+              <td>{{ order_item.variation.color }}</td>
+              <td>{{ order_item.quantity }}</td>
+              <td class="cart__price total">₹{{ order_item.price }}</td>
+              <td>
+                {% if order_item.status == 'Pending' %}
+                <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{ order_item.status }}</span>
+                {% elif order_item.status == 'Processing' %}
+                <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{ order_item.status }}</span>
+                {% elif order_item.status == 'Shipped' %}
+                <span class="badge p-2 my-2 text-primary" style="font-size: medium;">{{ order_item.status }}</span>
+                {% elif order_item.status == 'Delivered' %}
+                <span class="badge p-2 my-2 text-success" style="font-size: medium;">{{ order_item.status }}</span>
+                {% elif order_item.status == 'Cancelled' or 'refunded' %}
+                <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{ order_item.status }}</span>
+                {% endif %}
+              </td>
+              {% if order_item.status != 'Cancelled' and order_item.status != 'Delivered' and order_item.status != 'Return'%}
+              <td>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
+                  data-bs-target="#exampleModals{{ forloop.counter }}">Cancel</button>
+                <!-- Modal for deleting the product -->
+                <div class="modal fade cartdata" id="exampleModals{{ forloop.counter }}" tabindex="-1"
+                  aria-labelledby="exampleModalLabel{{ forloop.counter }}" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content modal_content1">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel{{ forloop.counter }}">Confirm Cancel</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        Cancel Product {{ order_item.product.product_name }}
+                      </div>
+                      <div class="modal-footer">
+                        {% csrf_token %}
+                        <input type="hidden" class="order_id" value="{{ order_item.order.id }}">
+                        <input type="hidden" class="orderitem_id" value="{{ order_item.id }}">
+                        <button type="submit" class="btn btn-danger ordercancel">Confirm</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Deleting ended -->
+              </td>
+              {% else %}
+              
+              {% endif %}
+              {% if order_item.status != 'Cancelled' %}
+              <td>
+                {% if order_item.status == 'Delivered' %}
+                <!-- Button trigger modal -->
+                <a type="button" data-bs-toggle="modal" data-bs-target="#editprofile">
+                  <button class="btn btn-outline-dark">Return</button>
+                </a>
+                <!--Reason Modal -->
+                <div class="modal fade" id="editprofile" tabindex="-1" aria-labelledby="exampleModalLabel{{ forloop.counter }}"
+                  aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h4 class="modal-title fs-5" id="exampleModalLabel{{ forloop.counter }}">Return reason form</h4>
+                        <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                          <i class="fa fa-times"></i>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="{%url 'orderreturn' order_item.id%}" enctype="multipart/form-data" method="POST">
+                          {% csrf_token %}
+                          <div class="form-outline mb-4">
+                            <select class="form-select mb-1" aria-label="Default select example" name="options">
+                              <option value="damaged_roduct">Damaged Product</option>
+                              <option value="itemwrong">Item Wrong</option>
+                              <option value="nothing">Nothing</option>
+                            </select>
+                            <label class="form-label" for="form3Example3cg">Choose issue</label>
+                          </div>
+                          <div class="form-outline mb-4">
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="reason"></textarea>
+                            <label class="form-label" for="form3Example3cg">Reason</label>
+                          </div>
+                          <div class="d-flex justify-content-center">
+                            <button type="submit"
+                              class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light">Return</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </div>
+                {% elif order_item.status == 'Return' %}
+                <a href="{%url 'trackorder' %}" type="button" class="btn btn-outline-dark">Track Your Return</a>
+                {% else %}
+                <a href="{%url 'trackorder' %}" type="button" class="btn btn-outline-dark">Track Your order</a>
+                {% endif %}
+              </td>
+              {% endif %}
+            </tr>
+        
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6 mt-4">
+        <div class="continue__btn mb-4">
+            <a href="{%url 'shop'%}">Continue Shopping</a>
+        </div>
+    </div>
+</div>
+  </section>
+  <!--================ confirmation part end =================-->
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+
+<script>
+  $(document).ready(function() {
+      $('.ordercancel').click(function(e) {
+        e.preventDefault();
+        var order_ids = $(this).closest('.modal-content').find('.order_id').val();
+        var orderitem_ids = $(this).closest('.modal-content').find('.orderitem_id').val();
+        var token = $("[name='csrfmiddlewaretoken']").val();
+        
+        $.ajax({
+          method: "POST",
+          url: "/orders/ordercancel/",
+          data: {
+            'order_id': order_ids,
+            'orderitem_id': orderitem_ids,
+            csrfmiddlewaretoken: token
+          },
+          success: function(response) {
+            console.log(response);
+            alertify.success(response.status);
+    
+            location.reload();
+          },
+          error: function(xhr, status, error) {
+            console.log(xhr.responseText);
+            // Handle error case
+          }
+        });
+      });
+    });
+    
+</script>
+
+{% endblock %}

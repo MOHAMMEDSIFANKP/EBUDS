@@ -84,11 +84,13 @@
                 <a href="{%url 'orders'%}" class="btn btn-outline-dark ">Orders</a>
               </div>
               <div class="col-sm-6">
-                <p class="text-success mb-0 h5 text-end">
-                  ₹ {{wallets.wallet|floatformat:0}} 
-                  {{wallets.wallet}}
-                </p>
+                {% for wallet in wallets %}
+                  <p class="text-success mb-0 h5 text-end">
+                    ₹ {{ wallet.wallet|floatformat:0 }} 
+                  </p>
+                {% endfor %}
               </div>
+              
             </div>
             
             </div>

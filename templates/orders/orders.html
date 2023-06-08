@@ -2,6 +2,7 @@
 {% block title %}My Orders{% endblock %}
 {% block body %}
 {% load static %}
+<link rel="stylesheet" href="{% static 'admin/css/styles.min.css'%}"/>
 
 <link rel="stylesheet" type="text/css" href="{%static 'single/css/util.css'%}">
 <link rel="stylesheet" type="text/css" href="{%static 'single/css/main.css'%}">
@@ -33,95 +34,35 @@
     rel="stylesheet">
 
 <!-- Shopping Cart Section Begin -->
-<section class="shopping-cart spad cartdata">
+<section class="shopping__cart__table spad cartdata">
     <div class="container">
         <div class="row ">
             <table class="product_data">
                 <thead>
                     <tr>
-                        <th>Product</th>
+                        <th>Photo</th>
                         <th>Name & Price</th>
-                        <th>Color</th>
-                        <th>Quantity</th>
                         <th>Total</th>
-                        <th>Payment Method</th>
                         <th>Tracking No</th>
-                        <th>Status</th>
                         <th>Action</th>
-                        <th></th>
-
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>        
                   {% for odritem in orderitems %}
                   <tr>
-                      
-                      <td class="product_cart_item">
-                          <div class="product_cart_item_pic">
-                              <img src="{{ odritem.variation.image1.url }}" height="90px" alt="IMG">
-                          </div>
-                      </td>
+                    <td class="product_cart_item">
+                        <div class="product_cart_item_pic">
+                            <img src="{{ odritem.variation.image1.url }}" height="90px" alt="IMG">
+                        </div>
+                    </td>
                       <td class="product_cart_item_text">
                           <h5 style="font-weight: bold;">{{ odritem.product.product_name }}</h5>
                           <h5 style="font-weight: bold;">₹{{ odritem.product.product_price }}</h5>
                       </td>
-                      <td>{{ odritem.variation.color }}</td>
-                      <td>{{ odritem.quantity }}</td>
                       <td class="cart__price total">₹{{ odritem.order.total_price }}</td>
-                      <td>{{ odritem.order.payment_mode }}</td>
                       <td>{{ odritem.order.tracking_no }}</td>
-                      <td>
-                          {% if odritem.order.status == 'Pending' %}
-                              <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{ odritem.order.status }}</span>
-                          {% elif odritem.order.status == 'Processing' %}
-                              <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{ odritem.order.status }}</span>
-                          {% elif odritem.order.status == 'Shipped' %}
-                              <span class="badge p-2 my-2 text-primary" style="font-size: medium;">{{ odritem.order.status }}</span>
-                          {% elif odritem.order.status == 'Delivered' %}
-                              <span class="badge p-2 my-2 text-success" style="font-size: medium;">{{ odritem.order.status }}</span>
-                          {% elif odritem.order.status == 'Cancelled' or 'refunded' %}
-                              <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{ odritem.order.status }}</span>
-                          {% endif %}
-                      </td>
-                      
-                      <td>
-                          <!-- Button trigger modal -->
-                          <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModals{{ forloop.counter }}">
-                              Cancel
-                          </button>
-                          <!-- Modal for deleting the product -->
-                          <div class="modal fade cartdata" id="exampleModals{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ forloop.counter }}" aria-hidden="true">
-                              <div class="modal-dialog">
-                                  <div class="modal-content">
-                                      <div class="modal-header">
-                                          <h1 class="modal-title fs-5" id="exampleModalLabel{{ forloop.counter }}">Confirm Cancel</h1>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                      </div>
-                                      <div class="modal-body">
-                                          Cancel Product {{ odritem.product.product_name }}
-                                      </div>
-                                      <div class="modal-footer">
-                                        {% csrf_token %}
-                                        <input type="hidden" class="order_id" value="{{ odritem.order.id }}">
-                                        <input type="hidden" class="orderitem_id" value="{{ odritem.id }}">
-                                          <button type="submit" class="btn btn-danger ordercancel">Confirm</button>
-                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                          <!-- Deleting ended -->
-                      </td>
-                      {% if odritem.order.status != 'Cancelled' %}
-                      <td>
-                          {% if odritem.order.status == 'Delivered' %}
-                              <button type="button" class="btn btn-outline-dark">View Order</button>
-                          {% else %}
-                              <a href="{%url 'trackorder' %}" type="button" class="btn btn-outline-dark">Track Your order</a>
-                          {% endif %}
-                      </td>
-                      {% endif %}
+                      <td><a href="{%url 'vieworderdetail' odritem.id %}" class="btn btn-outline-dark">View order details</a></td>
                   </tr>
                   {% endfor %}
                   

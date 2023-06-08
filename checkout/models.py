@@ -12,14 +12,6 @@ class Order(models.Model):
     total_price = models.FloatField(null=False)
     payment_mode = models.CharField(max_length=150, null= False)
     payment_id = models.CharField(max_length=250, null=True)
-    orderstatuses = {
-        ('Pending','Pending'),
-        ('Processing','Processing'),
-        ('Shipped','Shipped'),
-        ('Delivered','Delivered'),
-        ('Cancelled','Cancelled'),
-    }
-    status = models.CharField(max_length=150,choices=orderstatuses, default='Pending')
     message = models.TextField(null=True)
     tracking_no = models.CharField(max_length=150,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,6 +26,15 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.FloatField(null=False)
     quantity = models.IntegerField(null=False)
+    orderstatuses = {
+        ('Pending','Pending'),
+        ('Processing','Processing'),
+        ('Shipped','Shipped'),
+        ('Delivered','Delivered'),
+        ('Cancelled','Cancelled'),
+        ('Return', 'Return')
+    }
+    status = models.CharField(max_length=150,choices=orderstatuses, default='Pending')
 
     def __str__(self):
         return '() ()'.format(self.order.id, self.order.tracking_no)

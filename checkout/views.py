@@ -6,7 +6,7 @@ from userprofile.models import Address
 from django.contrib import messages
 from product.models import Product, Variations
 from checkout.models import Order, OrderItem
-from coupon.models import Usercoupon
+from coupon.models import Usercoupon, Coupon
 from django.shortcuts import render, redirect
 import random
 
@@ -33,12 +33,14 @@ def checkout(request):
         grand_total = total_price + tax
     address = Address.objects.filter(user = request.user)
     usercoupon = Usercoupon.objects.filter(user=request.user).last()
+    coupons = Coupon.objects.all()
     context = {
         'cartitems' : cartitems,
         'total_price' : total_price,
         'grand_total' : grand_total,
         'address' : address,
         'usercoupon': usercoupon,
+        'coupons'  :coupons,
     }
     return render(request,'checkout/checkout.html',context)
 

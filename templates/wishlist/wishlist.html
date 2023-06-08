@@ -132,9 +132,6 @@ $(document).on('click', '.addToCartBtn', function(e) {
   var variant_id = $(this).data('variantid');
   var prod_id = $(this).data('productid');
   var product_qty = 1;
-  console.log(variant_id, 'variantid');
-  console.log(prod_id);
-  console.log(product_qty);
   $.ajax({
     method: "POST",
     url: "/cart/add_cart/",
