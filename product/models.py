@@ -27,8 +27,13 @@ class PriceFilter(models.Model):
     
     def __str__(self):
         return self.price_range
-
-
+# Offer
+class Offer(models.Model):
+    offer_name = models.CharField(max_length=100)
+    discount_amount = models.PositiveIntegerField()
+    
+    def _str_(self):
+        return self.offer_name
 
 # product
 class Product(models.Model):
@@ -38,6 +43,7 @@ class Product(models.Model):
     brand = models.ForeignKey(brand,on_delete=models.CASCADE)
     category = models.ForeignKey(category,on_delete=models.CASCADE)
     product_description = models.TextField(blank=True)
+    offer = models.ForeignKey(Offer, on_delete=models.SET_NULL, null=True )
     is_available = models.BooleanField(default=False)
     slug = models.SlugField(max_length=250,unique=True)
 
@@ -52,6 +58,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+    def get_offer(self):
+        return self.product_price - self.offer.discount_amount
 
 
 # Variations
@@ -62,7 +70,6 @@ class Variations(models.Model):
     image1 = models.ImageField(upload_to='photos/variations')
     image2 = models.ImageField(upload_to='photos/variations')
     image3 = models.ImageField(upload_to='photos/variations')
-
 
 
     

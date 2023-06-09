@@ -1,6 +1,12 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from category.models import category
 from .models import brand, banner as banners
+from checkout.models import *
+from django.db.models import Sum
+from django.db.models.functions import TruncDay
+from django.db.models import DateField
+from django.db.models.functions import Cast
+from datetime import datetime,timedelta
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -182,12 +188,16 @@ def dashboard(request):
 
 # user
 def user(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     user_data = User.objects.all().order_by('id')
     return render(request,'admin/user.html',{'users': user_data})
 
 
 # Block User
 def blockuser(request,user_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     user = User.objects.get(id=user_id)
     if user.is_active:
         user.is_active = False
@@ -200,11 +210,15 @@ def blockuser(request,user_id):
 # brand
 
 def brands(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     brand_data = brand.objects.all().order_by('id')
     return render(request, 'brand/brand.html',{'brand' : brand_data})
 
 # Crete brand
 def createbrands(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         cname = request.POST.get('brand_name', '')
         eimage = request.FILES.get('brand_image', None)
@@ -234,6 +248,8 @@ def createbrands(request):
 
 # Edit Brand
 def editbrands(request, editbrands_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         cname = request.POST['brand_name']
         address = request.POST['brand_address']
@@ -261,14 +277,17 @@ def editbrands(request, editbrands_id):
     return render(request, 'brand/editbrands.html', {'catego': cate})
 
 # Delete brand
-@login_required(login_url='adminsignin')
 def deletebrands(request,deletebrands_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     bran = brand.objects.get(id=deletebrands_id)
     bran.delete()
     return redirect('brands')
 
 # Banner
 def banner(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     dict_banner={
         'banner' : banners.objects.all(),
         'category' : category.objects.all(),
@@ -277,6 +296,8 @@ def banner(request):
 
 # Create Banner
 def createbanner(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         name = request.POST['banner_name']
         description = request.POST['banner_discription']
@@ -304,6 +325,8 @@ def createbanner(request):
 
 #  Edit Banner
 def editbanner(request,banner_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         name = request.POST['banner_name']
         description = request.POST['banner_discription']
@@ -330,12 +353,16 @@ def editbanner(request,banner_id):
 
 # Delete Banner
 def deletebanner(request,banner_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     ban = banners.objects.get(id = banner_id)
     ban.delete()
     return redirect('banner')
 
 # Search User
 def searchuser(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:
@@ -356,6 +383,8 @@ def searchuser(request):
     
 # Aearch Brand
 def search_brand(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:
@@ -376,6 +405,8 @@ def search_brand(request):
     
 # Search Banner
 def search_banner(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:
@@ -394,3 +425,32 @@ def search_banner(request):
     else:
         return render(request, '404.html')
     
+def salesreport(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+
+    delivered_items = OrderItem.objects.filter(status='Delivered')
+    revenue = delivered_items.aggregate(total_revenue=Sum('order__total_price'))['total_revenue'] or 0
+
+    top_selling = OrderItem.objects.values('product__name').annotate(quantity=Sum('quantity')).order_by('-quantity')[:5]
+
+    recent_sales = Order.objects.order_by('-created_at')[:5]
+
+    today = datetime.today()
+    date_range = 7
+    four_days_ago = today - timedelta(days=date_range)
+
+    sales_by_day = Order.objects.annotate(day=TruncDay('created_at')).values('day').annotate(total_price=Sum('total_price')).order_by('day')
+
+    sales_dates = Order.objects.annotate(sale_date=Cast('created_at', output_field=DateField())).values('sale_date').distinct()
+
+    context = {
+        'total_users': User.objects.count(),
+        'sales': Order.objects.count(),
+        'revenue': revenue,
+        'top_selling': top_selling,
+        'recent_sales': recent_sales,
+        'sales_by_day': sales_by_day,
+    }
+
+    return render(request, 'dashboard/salesreport.html', context)

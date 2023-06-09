@@ -24,5 +24,5 @@ def home(request):
     }
     return render(request,'user/index.html',dict_banner)
 
-def handler404_view(request, exception):
-    return render(request, 'error/index.html', status=404)
+def error_404_view(request,exception):
+    return render(request,'error/index.html')

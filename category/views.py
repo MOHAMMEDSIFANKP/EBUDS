@@ -9,16 +9,18 @@ from django.contrib.auth.decorators import login_required
 
 
 # category
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='adminsignin')
+
 def categories(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     category_data = category.objects.all().order_by('id')
     return render(request, 'category/category.html',{'category' : category_data})
 
 # Crete category
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='adminsignin')
+
 def createcategory(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         image = request.FILES.get('image', None)
         name = request.POST['categories']
@@ -37,9 +39,10 @@ def createcategory(request):
     
 
 # Edit Category
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='adminsignin')
+
 def editcategory(request, editcategory_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         name = request.POST['categories']
         discrption = request.POST['categories_discription']
@@ -65,15 +68,18 @@ def editcategory(request, editcategory_id):
         return redirect ('categories')
 
 # Delete Category
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-@login_required(login_url='adminsignin')
+
 def deletecategory(request,deletecategory_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     categre = category.objects.get(id=deletecategory_id)
     categre.delete()
     return redirect('categories')
 
 # Search Category
 def search_category(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:

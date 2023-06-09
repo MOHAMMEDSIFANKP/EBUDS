@@ -11,14 +11,14 @@
     {% endfor %}
     {% endif %}
 	<div class="inputGroup inputGroup2">
-		<input type="text" id="loginUsername" name="email" value="{{pre_name}}" placeholder="Email" />
+		<input type="text" id="loginUsername" name="password1" value="" placeholder="Password" />
 	  </div>
       <div class="inputGroup inputGroup2">
-		<input type="text" id="loginUsername" name="email" value="{{pre_name}}" placeholder="Email" />
+		<input type="text" id="loginUsername" name="password2" value="" placeholder="Conform Password" />
 	  </div>
   
 	<div class="inputGroup inputGroup3">
-	  <button type="submit" id="login">verify email</button>
+	  <button type="submit" id="login">Submit</button>
 	</div>
 	<a href="{% url 'signin'%}" style="float: right; margin-top: 26px;text-decoration: none;">Goto signin</a>
   </form>

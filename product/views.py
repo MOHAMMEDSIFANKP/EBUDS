@@ -8,7 +8,9 @@ import logging
 # Create your views here.
 
 # Product
-def product(reqeust):
+def product(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     prodec = products.objects.all().order_by('id')
     dict_list={
         'prod' : prodec,
@@ -16,10 +18,12 @@ def product(reqeust):
         'brand': brand.objects.all(),
         'price_range' : PriceFilter.objects.all()
     }
-    return render(reqeust ,'product/product.html',dict_list)
+    return render(request ,'product/product.html',dict_list)
 
 # Add Product
 def createproduct(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         name = request.POST['product_name']
         price = request.POST['product_price']
@@ -68,6 +72,8 @@ def createproduct(request):
 
 # Edit Product
 def editproduct(request,editproduct_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         pname = request.POST['product_name']
         pprice = request.POST['product_price']
@@ -105,12 +111,16 @@ def editproduct(request,editproduct_id):
         return redirect('product')
 
 # Edit Delete
-def deleteproduct(reqeust,deleteproduct_slug):
+def deleteproduct(request,deleteproduct_slug):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     pro = products.objects.get(slug=deleteproduct_slug)
     pro.delete()
     return redirect('product')
 # Variations
 def variations(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     dict_list={
         'prodect' : products.objects.all(),
         'color' : Color.objects.all(),
@@ -120,6 +130,8 @@ def variations(request):
 
 # Add Variations
 def createvariations(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         product_id = request.POST['product']
         color = request.POST['color']
@@ -159,6 +171,8 @@ def createvariations(request):
 
 # Edit Variations
 def editvariations(request, edit_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if request.method == 'POST':
         product = request.POST['product']
         color = request.POST['color']
@@ -212,6 +226,8 @@ def deletevariations(request, delet_id):
 
 # Search Product
 def search_product(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:
@@ -232,6 +248,8 @@ def search_product(request):
     
 # Search Variations
 def search_variations(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:

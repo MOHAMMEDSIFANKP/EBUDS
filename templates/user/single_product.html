@@ -99,7 +99,7 @@
                 </h2>
                   
                 <span class="mtext-106 cl2" style="font-weight: 700;">
-                  ₹{{variation.product.product_price}}
+                  <h5>{% if variation.product.offer %}₹ <del class="text-danger"> {{variation.product.product_price}}</del> {{variation.product.get_offer}}{% else %} ₹ {{variation.product.product_price}} {% endif %}</h5>
                 </span>
 
                 <p class="stext-102 cl3 p-t-23" style="font-size: larger;">
@@ -800,6 +800,7 @@ $('.ChangeColor').change(function (e) {
             console.log(response);
             alertify.success(response.status);
             var variant_id = response.variation_id
+            console.log(variant_id,'daxo');
             console.log(variant_id);
             var var_d = document.getElementsByClassName('var_id')[0].value = variant_id
             console.log('new varid = ',var_d)

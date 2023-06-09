@@ -45,6 +45,7 @@ def checkout(request):
     return render(request,'checkout/checkout.html',context)
 
 # Place order
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 @login_required(login_url='signin')
 def placeorder(request):
     if request.method == 'POST':
@@ -93,19 +94,21 @@ def placeorder(request):
             )
 
             # To decrease the product quantity from available stock
-            variation = Variations.objects.filter(id=item.variation.id).first()
-            variation.quantity = variation.quantity - item.product_qty
-            variation.save()
-            payment_mode = request.POST.get('payment_method')
-            if (payment_mode == "Razorpay"):
-                Cart.objects.filter(user=request.user).delete()
-                return JsonResponse({'status' : "Yout order has been placed successfully"})
-        # To clear user Cart
+        variation = Variations.objects.filter(id=item.variation.id).first()
+        variation.quantity = variation.quantity - item.product_qty
+        variation.save()
+        payment_mode = request.POST.get('payment_method')
+        if (payment_mode == "Razorpay"):
+            Cart.objects.filter(user=request.user).delete()
+            return JsonResponse({'status' : "Yout order has been placed successfully"})
+# To clear user Cart
         Cart.objects.filter(user=request.user).delete()
 
     return redirect('checkout')
 
 # Add Checkout Addres
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='signin')
 def addcheckoutaddr(request):
     if request.method == 'POST':
         address = Address()
@@ -126,11 +129,15 @@ def addcheckoutaddr(request):
         return redirect('checkout')
     return redirect('checkout')
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='signin')
 def deleteaddresscheckout(request,delete_id):
     address = Address.objects.filter(id=delete_id)
     address.delete()
     return redirect('placeorder')
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='signin')
 def razarypaycheck(request):
     cart = Cart.objects.filter(user=request.user)
     total_price = 0

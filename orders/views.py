@@ -7,12 +7,16 @@ from django.http.response import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.db.models import Q
+from django.views.decorators.cache import cache_control
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
 
 # Order
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='signin')
 def orders(request):
     user = request.user
     orders = Order.objects.filter(user=user)
@@ -25,6 +29,8 @@ def orders(request):
     return render(request, 'orders/orders.html', context)
 
 # Order Cancell
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='signin')
 def ordercancel(request):
     orderid = int(request.POST.get('order_id'))
     orderitem_id = request.POST.get('orderitem_id')
@@ -53,6 +59,8 @@ def ordercancel(request):
     orderitem.save()
     return redirect('orders')
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='signin')
 def vieworderdetail(request,orderitem_id):
     try:
         order_item = OrderItem.objects.get(id=orderitem_id)
@@ -104,6 +112,8 @@ def orderreturn(request,return_id):
 
 # Admin side Order View
 def orderdetails(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     orders = Order.objects.all()
     orderitems = OrderItem.objects.filter(order__in=orders).order_by('-order__update_at')
     context = {
@@ -114,6 +124,8 @@ def orderdetails(request):
 
 # Admin side Order satus change
 def changestatus(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     orderitem_id = request.POST.get('orderitem_id')
     order_status = request.POST.get('order_status')
     orderitems = OrderItem.objects.get(id = orderitem_id)
@@ -122,6 +134,8 @@ def changestatus(request):
     orderitems.save()
     return JsonResponse({'status': "Updated"+ str(order_status) + "successfully"}) 
 
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+@login_required(login_url='signin')
 def trackorder(request):
     # print(order_id)
     # order = get_object_or_404(Order, id=order_id)
@@ -149,6 +163,8 @@ def trackorder(request):
 
 # admin side order search
 def search_orders(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:

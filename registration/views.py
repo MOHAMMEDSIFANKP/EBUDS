@@ -19,7 +19,7 @@ from django.core.exceptions import ValidationError
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def signin(request):
     if request.user.is_authenticated:
-        return redirect('home')  # Redirect authenticated users to home page or dashboard
+        return redirect('home') 
 
     if request.method == "POST":
         uname = request.POST['username']
@@ -28,12 +28,12 @@ def signin(request):
         # Validation
         if uname.strip() == '' or pwd.strip() == '':
             messages.error(request, "Fields can't be blank")
-            return redirect('signin')  # Redirect to sign-in page with error message
+            return redirect('signin')
 
         user = authenticate(username=uname, password=pwd)
         if user is not None and user.is_active:
             login(request, user)
-            return redirect('home')  # Redirect to a different page after successful authentication
+            return redirect('home') 
         else:
             messages.error(request, "Your username or password is incorrect")
             return redirect('signin')  # Redirect to sign-in page with error message
@@ -153,7 +153,6 @@ def signup(request):
             else:
                 pass
             
-            print(password1,'daxo')
             Pass = ValidatePassword(password1)
             if Pass is False:
                 context ={
@@ -224,8 +223,23 @@ def forgot_password(request):
             get_email=request.POST.get('email')
             usr=User.objects.get(email=get_email)
             if int(get_otp)==UserOTP.objects.filter(user=usr).last().otp:
-                UserOTP.objects.filter(user=usr).delete()
-                return redirect('reset')
+                user = User.objects.get(email = get_email)
+                password1 = request.POST.get('password1')
+                password2 = request.POST.get('password2')
+                Pass = ValidatePassword(password1)
+                if password1 == password2:
+                    if Pass is False:
+                        context ={
+                                'pre_otp':get_otp,
+                            }
+                        messages.info(request,'Enter Strong Password')
+                        return render(request,'registration/forgotpassword.html',context)
+                    user.set_password(password1)
+                    user.save()
+                    UserOTP.objects.filter(user=usr).delete()
+                    return redirect('signin')
+                else:
+                    messages.error(request,"Password dosn't match")
             else:
                 messages.warning(request,f'You Entered a wrong OTP')
                 return render(request,'registration/forgotpassword.html',{'otp':True,'usr':usr})
@@ -233,7 +247,6 @@ def forgot_password(request):
         # User rigistration validation
         else:
             email = request.POST['email']
-            print(email,'sinan')
             # null values checking
             check = [email]
             for values in check:

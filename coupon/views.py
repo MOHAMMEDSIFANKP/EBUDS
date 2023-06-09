@@ -34,12 +34,18 @@ def apply_coupon(request):
     return JsonResponse({'status': 'Invalid request'})
 
 def admincoupon(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+
     context = {
         'coupon' : Coupon.objects.all().order_by('-id')
     }
     return render (request,'coupon/coupon.html',context)
             
 def addcoupon(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+
     if request.method == 'POST':
         coupon_code = request.POST.get('coupon_code')
         discount = request.POST.get('discount')
@@ -84,6 +90,9 @@ def addcoupon(request):
             return redirect('admincoupon')
 
 def edicoupon(request,edit_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+
     if request.method == 'POST':
         coupon_code = request.POST.get('coupon_code')
         discount = request.POST.get('discount')
@@ -140,11 +149,17 @@ def edicoupon(request,edit_id):
     return redirect('admincoupon')
 
 def deletecoupon(request,delete_id):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+
     coupon = Coupon.objects.get(id = delete_id)
     coupon.delete()
     return redirect('admincoupon')
 
 def search_coupon(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+
     if 'keyword' in request.GET:
         keyword = request.GET['keyword']
         if keyword:

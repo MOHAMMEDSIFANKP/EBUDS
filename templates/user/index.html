@@ -99,7 +99,8 @@
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
                             </div>
-                            <h5>{{Variations.product.product_price}}</h5>
+                            <h5>{% if Variations.product.offer %}₹ <del> {{Variations.product.product_price}}</del> {{Variations.product.get_offer}}{% else %} ₹ {{Variations.product.product_price}} {% endif %}</h5>
+                            {% comment %} <h5>{{Variations.product.product_price}}</h5> {% endcomment %}
                             <div class="product__color__select">
                                 <label for="pc-1">
                                     <input type="radio" id="pc-1">
