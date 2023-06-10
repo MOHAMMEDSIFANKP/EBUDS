@@ -22,12 +22,6 @@
 <!-- Breadcrumb Section End -->
 <section>
     <div class="container py-5">  
-      {% for m in messages  %}
-        <div class="alert alert-info" id="message" role="alert">
-          {{m}}
-        </div>
-      {% endfor %}
-
       <div class="row">
         <div class="col-lg-4">
           <div class="card border rounded mb-4">
@@ -85,7 +79,7 @@
               </div>
               <div class="col-sm-6">
                 {% for wallet in wallets %}
-                  <p class="text-success mb-0 h5 text-end">
+                  <p class="text-danger mb-0 h5 text-end" style="font-weight: bold;">
                     ₹ {{ wallet.wallet|floatformat:0 }} 
                   </p>
                 {% endfor %}
@@ -468,7 +462,17 @@
 
     </div>
   </section>
-
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script>
+ {% for msg in messages %}
+   swal({
+     title: "Error!",
+     text: "{{msg}}",
+     icon: "error",
+     button: "ok",
+   });
+   {% endfor %}
+  </script>
   <script>
 {% comment %} 
       const myTextField = document.getElementById("id_fullname");

@@ -26,7 +26,6 @@ def apply_coupon(request):
             grand_total = grand_total - (grand_total * (coupon.discount / 100))
             usercoupon = Usercoupon.objects.create(user=request.user, coupon=coupon, used=True, total_price = grand_total)
             usercoupon.save()
-            print(grand_total,'hiii')
             return JsonResponse({'status': 'Coupon added successfully', 'coupon_discount': coupon_discount, 'grand_total': grand_total,})
         else:
             return JsonResponse({'status': 'You are not eligible for this coupon'})

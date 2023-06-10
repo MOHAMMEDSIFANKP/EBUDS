@@ -63,12 +63,14 @@ def ordercancel(request):
 @login_required(login_url='signin')
 def vieworderdetail(request,orderitem_id):
     try:
-        order_item = OrderItem.objects.get(id=orderitem_id)
+        order_item = OrderItem.objects.filter(order__tracking_no=orderitem_id)
+        order = Order.objects.get(tracking_no = orderitem_id)
     except OrderItem.DoesNotExist:
         messages.error(request, "The specified OrderItem does not exist.")
         return redirect('orders')
-    address = int(order_item.order.address.id)
+    address = int(order.address.id)
     cotext = {
+        'order' : order,
         'address': Address.objects.get(id=address),
         'order_item' : order_item,
     }
@@ -91,6 +93,7 @@ def orderreturn(request,return_id):
         qty = orderitem_id.quantity
         pid = orderitem_id.variation.id
         order_id = Order.objects.get(id = orderitem_id.order.id)
+        tracking_id = order_id.tracking_no
         variation = Variations.objects.filter(id=pid).first()
         variation.quantity = variation.quantity + qty
         variation.save()
@@ -108,7 +111,7 @@ def orderreturn(request,return_id):
         orderitem_id.quantity = 0
         orderitem_id.price = 0
         orderitem_id.save()
-        return redirect('vieworderdetail',return_id)
+        return redirect('vieworderdetail',tracking_id)
 
 # Admin side Order View
 def orderdetails(request):

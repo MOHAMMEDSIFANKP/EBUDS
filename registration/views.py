@@ -176,7 +176,6 @@ def signup(request):
                     usr = User.objects.create_user(first_name=firstname, last_name=lastname, username=name,email=email,password=password1)
                     usr.is_active=False
                     usr.save()
-                    
                     user_otp=random.randint(100000,999999)
                     UserOTP.objects.create(user=usr,otp=user_otp)
                     mess=f'Hello\t{usr.username},\nYour OTP to verify your account for EBUDS is {user_otp}\nThanks!'

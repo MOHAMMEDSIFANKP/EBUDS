@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from category.models import category
 from .models import brand, banner as banners
+from product.models import Offer
 from checkout.models import *
 from django.db.models import Sum
 from django.db.models.functions import TruncDay
@@ -424,33 +425,45 @@ def search_banner(request):
             return render(request, 'banner/banner.html', {'message': message})
     else:
         return render(request, '404.html')
-    
+
+# offer
+def adminoffer(request):
+    context = {
+        'offer' : Offer.objects.all()
+    }
+
+    return render (request,'offer/offer.html',context)
+from datetime import datetime
+# Sales reprt
 def salesreport(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
+    context = {}
 
-    delivered_items = OrderItem.objects.filter(status='Delivered')
-    revenue = delivered_items.aggregate(total_revenue=Sum('order__total_price'))['total_revenue'] or 0
 
-    top_selling = OrderItem.objects.values('product__name').annotate(quantity=Sum('quantity')).order_by('-quantity')[:5]
 
-    recent_sales = Order.objects.order_by('-created_at')[:5]
+    if request.method == 'POST':
+        start_date = request.POST.get('start-date')
+        end_date = request.POST.get('end-date')
+        
+        if start_date == '' or end_date == '':
+            messages.error(request, 'Give date first')
+            return redirect(salesreport)
+            
+        if start_date == end_date:
+            date_obj = datetime.strptime(start_date, '%Y-%m-%d')
+            order_items = OrderItem.objects.filter(order__created_at__date=date_obj.date())
+            if order_items:
+                context.update(sales=order_items, s_date=start_date, e_date=end_date)
+                return render(request, 'admin/salesreport.html', context)
+            else:
+                messages.error(request, 'No data found')
+            return redirect(salesreport)
 
-    today = datetime.today()
-    date_range = 7
-    four_days_ago = today - timedelta(days=date_range)
+        order_items = OrderItem.objects.filter(order__created_at__date__gte=start_date, order__created_at__date__lte=end_date)
 
-    sales_by_day = Order.objects.annotate(day=TruncDay('created_at')).values('day').annotate(total_price=Sum('total_price')).order_by('day')
-
-    sales_dates = Order.objects.annotate(sale_date=Cast('created_at', output_field=DateField())).values('sale_date').distinct()
-
-    context = {
-        'total_users': User.objects.count(),
-        'sales': Order.objects.count(),
-        'revenue': revenue,
-        'top_selling': top_selling,
-        'recent_sales': recent_sales,
-        'sales_by_day': sales_by_day,
-    }
-
-    return render(request, 'dashboard/salesreport.html', context)
+        if order_items:
+            context.update(sales=order_items, s_date=start_date, e_date=end_date)
+        else:
+            messages.error(request, 'No data found')
+    return render(request, 'admin/salesreport.html', context)

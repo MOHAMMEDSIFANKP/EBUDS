@@ -39,15 +39,6 @@
     <a href="{%url 'shop'%}" class="btn btn-primary font-weight-bold">Continue Shopping</a>
 </div>
 {% else %}
-<div id="addressError" class="text-danger text-center" style="display: none;">Please select an address.</div>
-
-        <div class="text-center text-danger">
-            {% if messages %}
-                {% for message in messages %}
-                    <strong>{{ message }}</strong>
-                {% endfor %}
-            {% endif %}
-        </div>
         <div class="checkout__form">
             
           <div class="row">
@@ -324,7 +315,7 @@
                               </h2>
                               <div id="flush-collapse{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="flush-heading{{ forloop.counter }}" data-bs-parent="#accordionFlushExample">
                                 <div class="accordion-body">
-                                  <p><b>*</b>Applicable only for order price more than <b>${{item.min_value}}\-</b></p>
+                                  <p><b>*</b>Applicable only for order price more than <b>{{item.min_value}}\-</b></p>
                               <span class="ml-3">Coupon Code: <b class="text-danger">{{item.coupon_code}}</b></span>
                                 </div>
                               </div>
@@ -341,11 +332,11 @@
                             <div class="checkout__order__products">Product <span>Total</span></div>
                             <ul class="checkout__total__products">
                                 {% for item in cartitems %}
-                                <li><img src="{{item.variation.image1.url}}" height="40px" alt="">  {{item.product.product_name}}<span>₹{{item.product.product_price}}</span></li>
-                                <li>Coupen applyed</li>
+                              <li><img src="{{item.variation.image1.url}}" height="40px" alt="">  {{item.product.product_name}}<span>{% if item.product.offer %}<del style="color: red;">₹ {{item.product.product_price}}</del> ₹{{item.product.get_offer}}{% else %} ₹ {{item.product.product_price}} {% endif %}</span>
+                                </span></li>
                                 {% endfor %}
-                            </ul>
-                            <ul class="checkout__total__all cartdata">
+                            </ul><div class="cartdata">
+                            <ul class="checkout__total__all">
                                 <li>Subtotal <span>₹{{total_price}}</span></li>
                                 {%if usercoupon%}
                                 <li>Discount <span id="discount">{{ usercoupon.coupon.discount }}</span>%</li>
@@ -354,7 +345,7 @@
                                 <li>Total <span id="grand_total">₹{{grand_total}}</span></li>
                                 {% endif %}
                                 <input type="hidden" class="grand_total" id="grand_total" value="{{grand_total}}">
-                            </ul>
+                            </ul></div>
                             <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
                             ut labore et dolore magna aliqua.</p>
                             <div class="checkout__input__radio">
@@ -389,6 +380,17 @@
 </section>
 <!-- Checkout Section End -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+ <script>
+{% for msg in messages %}
+  swal({
+    title: "Error!",
+    text: "{{msg}}",
+    icon: "error",
+    button: "ok",
+  });
+  {% endfor %}
+ </script>
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
@@ -501,32 +503,23 @@ $("#coupon-form").submit(function(event) {
       csrfmiddlewaretoken: '{{csrf_token}}',
       
     },
-    success: function(response) {
-      alertify.success(response.status);
+    success: function (response){
+      console.log(response)
+    if (response.status === 'Field is blank' || response.status === 'Coupon does not exist' || response.status === 'Coupon already used!' || response.status === 'You are not eligible for this coupon') {
+        swal("Error!", response.status, "error")
+        $('.cartdata').load(location.href + " .cartdata");
+    }else if (response.status === 'Coupon added successfully'){
+      swal("Congratulations!.", response.status, "success")
+        $('.cartdata').load(location.href + " .cartdata");
+    }else{
+      swal("Error!", response.status, "error")
       $('.cartdata').load(location.href + " .cartdata");
-    },
-    error: function(xhr, status, error) {
-      // Handle the error response
-      console.log(xhr.responseText);
-      // Display an error message or perform any necessary actions
     }
+  }
   });
 });
 });
 
-</script>
-<script>
-  document.getElementById('orderForm').addEventListener('submit', function(event) {
-      var addressInput = document.querySelector('input[name="address"]:checked');
-      var addressError = document.getElementById('addressError');
-      
-      if (!addressInput) {
-          addressError.style.display = 'block';
-          event.preventDefault();
-      } else {
-          addressError.style.display = 'none';
-      }
-  });
-</script>
+</script> 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 {% endblock  %}

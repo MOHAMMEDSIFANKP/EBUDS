@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from carts.models import Cart
 from wishlist.models import Wishlist
-from product.models import Product, Variations
+from product.models import Product, Variations,Offer
 from django.http.response import JsonResponse
 from django.views.decorators.cache import cache_control
 from django.contrib.auth.decorators import login_required
@@ -37,7 +37,7 @@ def add_cart(request):
                         pass
                     return JsonResponse({'status': 'Product added successfully'})
                 else:
-                    return JsonResponse({'status': "Only"+ str(variation_check.quantity) + "quantity available"})
+                    return JsonResponse({'status': "Only few quantity available"})
         else:
             return JsonResponse({'status': 'Login to continue'})
     return redirect('single')
@@ -52,12 +52,17 @@ def cart(request):
     grand_total =0
     single_product_total = [0]
     for item in cart:
-        total_price = total_price + item.product.product_price * item.product_qty
-        single_product_total.append(item.product.product_price * item.product_qty)
-        tax = total_price * 0.18
-        grand_total = total_price + tax
-
-
+        if item.product.offer == None:
+            total_price = total_price + item.product.product_price * item.product_qty
+            single_product_total.append(item.product.product_price * item.product_qty)
+            tax = total_price * 0.18
+            grand_total = total_price + tax
+        else:
+            total_price = total_price + item.product.product_price * item.product_qty
+            single_product_total.append(item.product.product_price * item.product_qty)
+            total_price = total_price - item.product.offer.discount_amount
+            tax = total_price * 0.18
+            grand_total = total_price + tax
     context = {
         'cart' : cart,
         'total_price' : total_price,
@@ -84,11 +89,14 @@ def update_cart(request):
                 carts = Cart.objects.filter(user = request.user).order_by('id')
                 total_price = 0
                 for item in carts:
-                    total_price = total_price + item.product.product_price * item.product_qty
-
+                    if item.product.offer == None:
+                        total_price = total_price + item.product.product_price * item.product_qty
+                    else :
+                        total_price = total_price + item.product.product_price * item.product_qty
+                        total_price = total_price-item.product.offer.discount_amount
                 return JsonResponse({'status': 'Updated successfully','sub_total':total_price,'product_price':cart.product.product_price,'quantity':prod_qty})
             else:
-                return JsonResponse({'status': 'Not quantity'})
+                return JsonResponse({'status': 'Not allowed this Quantity'})
     return JsonResponse('something went wrong, reload page',safe=False)
 
 # Deletecart

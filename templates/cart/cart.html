@@ -73,7 +73,7 @@
                                         </td>
                                         <td class="product_cart_item_text">
                                             <h5 style="font-weight: bold;">{{ item.variation.product.product_name }}</h5>
-                                            <h5 style="font-weight: bold;">₹{{ item.variation.product.product_price }}</h5>
+                                            <h5>{% if item.variation.product.offer %}₹ <del class="text-danger"> {{item.variation.product.product_price}}</del> {{item.variation.product.get_offer}}{% else %} ₹ {{item.variation.product.product_price}} {% endif %}</h5>
                                         </td>                
     
     
@@ -136,9 +136,9 @@
                     <div class="cart__total">
                         <h6>Cart total</h6>
                         <ul>
-                            <li>Total Price ₹<span id="sub_total">{{total_price}}</span></li>
-                            <li>Tax ₹<span id="tax_field">{{tax}}</span></li>
-                            <li>Grand Total ₹<span id="grand_total">{{grand_total}}</span></li>
+                            <li>Total Price ₹<span id="sub_total">{{total_price |floatformat:2}}</span></li>
+                            <li>Tax ₹<span id="tax_field">{{tax|floatformat:2}}</span></li>
+                            <li>Grand Total ₹<span id="grand_total">{{grand_total |floatformat:2}}</span></li>
                         </ul >
                         {%if cart%}
                         <a href="{%url 'checkout'%}" class="primary-btn">Proceed to checkout</a>
@@ -151,7 +151,7 @@
         </div>
     </section>
     <!-- Shopping Cart Section End -->
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 
  $('.quantity button').on('click', function () {
@@ -186,7 +186,9 @@ $('.changeQuantity').click(function(e) {
      
         success: function(response) {
             console.log(response);
-            alertify.success(response.status);
+            if (response.status === 'Not allowed this Quantity') {
+                swal("Error!", response.status, "error")
+            }
             sub_total = parseInt(response.sub_total)
             
             document.getElementById('sub_total').textContent = sub_total
@@ -214,7 +216,7 @@ $(document).ready(function() {
                 csrfmiddlewaretoken: '{{csrf_token}}'
             },
             success: function(response) {
-                alertify.success(response.status);
+                
                 sub_total = parseInt(response.sub_total);
                 console.log(response);
                 document.getElementById('sub_total').textContent = sub_total;

@@ -28,9 +28,15 @@ def checkout(request):
     grand_total = 0
     tax = 0  
     for item in cartitems:
-        total_price = total_price + item.product.product_price * item.product_qty
-        tax = total_price * 0.18
-        grand_total = total_price + tax
+        if item.product.offer == None:
+            total_price = total_price + item.product.product_price * item.product_qty
+            tax = total_price * 0.18
+            grand_total = total_price + tax
+        else:
+            total_price = total_price + item.product.product_price * item.product_qty
+            total_price = total_price - item.product.offer.discount_amount
+            tax = total_price * 0.18
+            grand_total = total_price + tax
     address = Address.objects.filter(user = request.user)
     usercoupon = Usercoupon.objects.filter(user=request.user).last()
     coupons = Coupon.objects.all()
@@ -52,16 +58,26 @@ def placeorder(request):
         neworder = Order()
         neworder.user = request.user
         address_id = request.POST.get('address')
+        if address_id is None:
+            messages.error(request, 'Address fields is mandatory!')
+            return redirect('checkout')
         address = Address.objects.get(id=address_id)
         neworder.address = address
         neworder.payment_mode = request.POST.get('payment_method')
         neworder.payment_id = request.POST.get('payment_id')
-
         cart = Cart.objects.filter(user=request.user)
         cart_total_price = 0
+        tax = 0
         for item in cart:
-            cart_total_price += item.product.product_price * item.product_qty
-
+            if item.product.offer == None:
+                cart_total_price += item.product.product_price * item.product_qty
+                tax = cart_total_price * 0.18
+                cart_total_price +=tax
+            else:
+                cart_total_price += item.product.product_price * item.product_qty
+                cart_total_price -= item.product.offer.discount_amount
+                tax = cart_total_price * 0.18
+                cart_total_price +=tax
         payment = request.POST.get('payment_method')
         if (payment == "wallet"):
             wallet = Wallet.objects.get(user = request.user)

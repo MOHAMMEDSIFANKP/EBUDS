@@ -40,8 +40,7 @@
             <table class="product_data">
                 <thead>
                     <tr>
-                        <th>Photo</th>
-                        <th>Name & Price</th>
+                        <th>Created at</th>
                         <th>Total</th>
                         <th>Tracking No</th>
                         <th>Action</th>
@@ -49,20 +48,12 @@
                     </tr>
                 </thead>
                 <tbody>        
-                  {% for odritem in orderitems %}
+                  {% for orders in orders %}
                   <tr>
-                    <td class="product_cart_item">
-                        <div class="product_cart_item_pic">
-                            <img src="{{ odritem.variation.image1.url }}" height="90px" alt="IMG">
-                        </div>
-                    </td>
-                      <td class="product_cart_item_text">
-                          <h5 style="font-weight: bold;">{{ odritem.product.product_name }}</h5>
-                          <h5 style="font-weight: bold;">₹{{ odritem.product.product_price }}</h5>
-                      </td>
-                      <td class="cart__price total">₹{{ odritem.order.total_price }}</td>
-                      <td>{{ odritem.order.tracking_no }}</td>
-                      <td><a href="{%url 'vieworderdetail' odritem.id %}" class="btn btn-outline-dark">View order details</a></td>
+                      <td style="font-size: 17px;">{{ orders.created_at }}</td>
+                      <td class="cart__price total">₹{{ orders.total_price|floatformat:2 }}</td>
+                      <td style="font-size: 17px;">{{ orders.tracking_no }}</td>
+                      <td><a href="{%url 'vieworderdetail' orders.tracking_no %}" class="btn btn-outline-dark">View order details</a></td>
                   </tr>
                   {% endfor %}
                   

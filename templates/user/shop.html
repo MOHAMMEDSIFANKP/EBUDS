@@ -255,6 +255,7 @@
 <!-- Shop Section End -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 $('.addToCartBtn').click(function (e) {
     e.preventDefault();
@@ -273,8 +274,16 @@ $('.addToCartBtn').click(function (e) {
         },
         success: function (response){
             console.log(response)
-            alertify.success(response.status)
-            // $('.cartdata').load(location.href + " .cartdata");
+            if (response.status === 'Product already in Cart' || response.status === 'No such product found' || response.status === 'Only few quantity available') {
+              swal("Error!.", response.status, "error")
+              $('.cartdata').load(location.href + " .cartdata");
+          }else if (response.status === 'Product added successfully'){
+            swal("Congratulations!.", response.status, "success")
+              $('.cartdata').load(location.href + " .cartdata");
+          }else{
+            swal("Error!.", response.status, "error")
+            $('.cartdata').load(location.href + " .cartdata");
+          }
         }
         
     });
@@ -295,9 +304,17 @@ $('.addToCartBtn').click(function (e) {
           csrfmiddlewaretoken: '{{csrf_token }}'
         },
         success: function (response){
-          console.log(response)
-          alertify.success(response.status)
-          $('.cartdata').load(location.href + " .cartdata");
+            console.log(response)
+            if (response.status === 'Product already in wishlist' || response.status === 'No such product' || response.status === 'Login to continue') {
+              swal("Error!.", response.status, "error")
+              $('.cartdata').load(location.href + " .cartdata");
+          }else if (response.status === 'Product Added to in wishlist'){
+            swal("Congratulations!.", response.status, "success")
+              $('.cartdata').load(location.href + " .cartdata");
+          }else{
+            swal("Error!.", response.status, "error")
+            $('.cartdata').load(location.href + " .cartdata");
+          }
         }
        
       });

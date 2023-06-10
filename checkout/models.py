@@ -18,7 +18,7 @@ class Order(models.Model):
     update_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return '() - ()'.format(self.id, self.tracking_no)
+        return f"{self.id, self.tracking_no}"
     
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
@@ -37,6 +37,6 @@ class OrderItem(models.Model):
     status = models.CharField(max_length=150,choices=orderstatuses, default='Pending')
 
     def __str__(self):
-        return '() ()'.format(self.order.id, self.order.tracking_no)
+        return f"{self.order.id, self.order.tracking_no}"
          
     

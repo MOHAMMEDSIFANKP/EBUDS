@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from category.models import category
 from django.contrib import messages
-from .models import Product as products, Variations, Color, PriceFilter
+from .models import Product as products, Variations, Color, PriceFilter, Offer
 from dashboard.models import brand
 import logging
 
@@ -16,7 +16,8 @@ def product(request):
         'prod' : prodec,
         'category' : category.objects.all(),
         'brand': brand.objects.all(),
-        'price_range' : PriceFilter.objects.all()
+        'price_range' : PriceFilter.objects.all(),
+        'offer' : Offer.objects.all(),
     }
     return render(request ,'product/product.html',dict_list)
 
@@ -31,6 +32,7 @@ def createproduct(request):
         brandname = request.POST.get('brand')
         category_id = request.POST.get('category')
         price_range = request.POST.get('price_range')
+        offer = request.POST.get('offer')
 
 # Validaiton
         if products.objects.filter(product_name=name).exists():
@@ -52,7 +54,7 @@ def createproduct(request):
         categeryid  = category.objects.get(id=category_id)
         brandid = brand.objects.get(brand_name=brandname)
         prange = PriceFilter.objects.get(id=price_range)
-
+        offer_id = Offer.objects.get(id = offer)
 
 # Save        
         produc = products(
@@ -63,6 +65,7 @@ def createproduct(request):
             brand = brandid,
             category = categeryid,
             price_range =prange,
+            offer = offer_id
         )
         
         produc.save()
@@ -81,6 +84,7 @@ def editproduct(request,editproduct_id):
         brandname = request.POST.get('brand')
         category_id = request.POST.get('category')
         price_range = request.POST.get('price_range')
+        offer = request.POST.get('offer')
 # validation
         try:
             is_availables = request.POST.get('checkbox', False)
@@ -98,6 +102,7 @@ def editproduct(request,editproduct_id):
         cates = category.objects.get(id=category_id)
         produc = brand.objects.get(brand_name=brandname)
         prange = PriceFilter.objects.get(id=price_range)
+        offer_id = Offer.objects.get(id = offer)
 # Save       
         cat = products.objects.get(slug=editproduct_id)
         cat.product_name = pname
@@ -107,6 +112,7 @@ def editproduct(request,editproduct_id):
         cat.is_available = is_availables
         cat.brand = produc
         cat.category = cates
+        cat.offer = offer_id
         cat.save()
         return redirect('product')
 

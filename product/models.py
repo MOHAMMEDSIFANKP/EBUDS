@@ -32,7 +32,7 @@ class Offer(models.Model):
     offer_name = models.CharField(max_length=100)
     discount_amount = models.PositiveIntegerField()
     
-    def _str_(self):
+    def __str__(self):
         return self.offer_name
 
 # product

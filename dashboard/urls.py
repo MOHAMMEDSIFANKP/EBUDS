@@ -18,5 +18,6 @@ urlpatterns = [
     path('createbanner/', views.createbanner, name='createbanner'),
     path('editbanner/<int:banner_id>/', views.editbanner, name='editbanner'),
     path('deletebanner/<int:banner_id>/', views.deletebanner, name='deletebanner'),
-    path('salesreport/',views.salesreport, name="salesreport")
+    path('Adminoffer/',views.adminoffer, name="adminoffer"),
+    path('salesreport/',views.salesreport, name="salesreport"),
 ]

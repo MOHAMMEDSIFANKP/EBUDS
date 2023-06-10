@@ -1,5 +1,5 @@
 {% extends 'admin/dashboardbase.html' %}
-{% block title %}Product{% endblock  %}
+{% block title %}Offer{% endblock  %}
 {% block body %}
 <!-- Button trigger modal -->
 <a type="button" class="btn btn-secondary w-60" style="margin-top: 80px;margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#addCategory">
@@ -25,58 +25,18 @@
       </div>
       <div class="modal-body">
 
-      <form action="{% url 'createproduct'%}"  enctype="multipart/form-data" method="POST">
+      <form action="{% url 'adminoffer'%}"  enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
         </div> 
         <div class="form-outline mb-4">
-          <input name='product_name' value="{{c.product_name}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
-          <label class="form-label" for="form3Example3cg">Product name</label>
+          <input name='ordername'   type="text" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">Offer name</label>
         </div>
         <div class="form-outline mb-4">
-          <input name='product_price' value="{{c.product_price}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
-          <label class="form-label" for="form3Example3cg">Price</label>
+          <input name='discount'  type="number" id="form3Example3cg" class="form-control form-control-lg" />
+          <label class="form-label" for="form3Example3cg">Discount Amount</label>
         </div>
-        <div class="form-outline mb-4">
-          <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="price_range">
-            {% for c in price_range %}
-            <option value="{{ c.id }}">{{ c.price_range }}</option>
-            {% endfor %}
-        </select>
-          <label class="form-label" for="form3Example3cg">Product_range</label>
-        </div>
-        <div class="form-outline mb-4">
-          <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="brand">
-            {% for b in brand %}
-            <option value="{{b.brand_name}}" >{{b.brand_name}}</option>
-            {% endfor %}
-          </select>
-          <label class="form-label" for="form3Example3cg">Product</label>
-        </div>
-        <div class="form-outline mb-4">
-          <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="category">
-            {% for c in category %}
-            <option value="{{ c.id }}">{{ c.categories }}</option>
-            {% endfor %}
-        </select>
-          <label class="form-label" for="form3Example3cg">Category</label>
-        </div>
-      <div class="form-outline mb-4">
-        <input name='product_description' value="{{c.product_description}}"  type="text" id="form3Example3cg" class="form-control form-control-lg" />
-        <label class="form-label" for="form3Example3cg">Discription</label>
-      </div>
-      <div class="form-outline mb-4">
-        <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="offer">
-          {% for c in offer %}
-          <option value="{{ c.id }}">{{ c.offer_name }}</option>
-          {% endfor %}
-      </select>
-      <label class="form-label" for="form3Example3cg">Offer</label>
-        </div>
-      <div class="form-outline mb-4">
-        <label class="form-label">Is Availble</label>
-        <input type="checkbox" name='checkbox'>
-      </div>
        <div class="d-flex justify-content-center">
           <button type="submit"
             class="btn btn-danger btn-lg gradient-custom-4 w-50 text-light" type="submit">Save Changes</button>
@@ -114,33 +74,19 @@
                 <thead>
                   <tr>
                     <th scope="col">id</th>
-                    <th scope="col">Product name</th>
-                    <th scope="col">product price</th>
-                    <th scope="col">Price Range</th>
-                    <th scope="col">category</th>
-                    <th scope="col">brand</th>
-                    <th scope="col">product description</th>
-                    <th scope="col">is_available</th>
+                    <th scope="col">Offer name</th>
+                    <th scope="col">Discount amount</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 
-                {% for c in prod %}
+                {% for c in offer %}
 
                   <tr>
                     <td>  {{c.id}}  </td>
-                    <td>  {{c.product_name}} </td>
-                    <td>{% if c.offer %}<del class="text-danger">₹  {{c.product_price}}</del> {{c.get_offer}}{% else %}₹ {{c.product_price}} {% endif %}</td>
-                    <td>  {{c.price_range}} </td>
-                    <td>  {{c.category}} </td>
-                    <td>  {{c.brand}} </td>
-                    <td>  {{c.product_description}} </td>
-                    {% if c.is_available %}
-                    <td> Yes</td>
-                    {% else %}
-                    <td> No</td>
-                    {% endif %}
-                   <td>
+                    <td>  {{c.offer_name}} </td>
+                    <td>  {{c.discount_amount}} </td>
+                    
                     <!-- edit -->
 
                       <!-- Button trigger modal -->

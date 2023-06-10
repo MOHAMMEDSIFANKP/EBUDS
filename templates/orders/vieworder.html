@@ -166,9 +166,9 @@
           <div class="card border rounded  mb-3">
             <div class="card-body">
               <h5 class="card-title" style="font-weight: bold;">ORDER INFO</h5>
-              <h5 class="card-text">Tracking No<span> : {{order_item.order.tracking_no}}</span></p>
-              <h5 class="card-text">Order Date<span> : {{order_item.order.created_at}}</span></p>
-              <h5 class="card-text">Payment Method<span> : {{order_item.order.payment_mode}}</span></p>
+              <h5 class="card-text">Tracking No<span> : {{order.tracking_no}}</span></p>
+              <h5 class="card-text">Order Date<span> : {{order.created_at}}</span></p>
+              <h5 class="card-text">Payment Method<span> : {{order.payment_mode}}</span></p>
               
             </div>
           </div>
@@ -185,13 +185,13 @@
               <th>Quantity</th>
               <th>Total</th>
               <th>Status</th>
-              <th>Action</th>
+              <th></th>
               <th></th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-
+            {% for order_item in order_item %}
             <tr>
               <td class="product_cart_item">
                 <div class="product_cart_item_pic">
@@ -200,11 +200,12 @@
               </td>
               <td class="product_cart_item_text">
                 <h5 style="font-weight: bold;">{{ order_item.product.product_name }}</h5>
-                <h5 style="font-weight: bold;">₹{{ order_item.product.product_price }}</h5>
+                <h5 style="font-weight: bold;">{% if order_item.product.offer %} <del class="text-danger"> ₹{{order_item.product.product_price}}</del> {{order_item.product.get_offer}}{% else %} ₹ {{variation.product.product_price}} {% endif %}</h5>
+
               </td>
               <td>{{ order_item.variation.color }}</td>
               <td>{{ order_item.quantity }}</td>
-              <td class="cart__price total">₹{{ order_item.price }}</td>
+              <td class="cart__price total">{{ order_item.order.total_price |floatformat:2}}</td>
               <td>
                 {% if order_item.status == 'Pending' %}
                 <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{ order_item.status }}</span>
@@ -301,7 +302,7 @@
               </td>
               {% endif %}
             </tr>
-        
+            {% endfor %}
           </tbody>
         </table>
       </div>

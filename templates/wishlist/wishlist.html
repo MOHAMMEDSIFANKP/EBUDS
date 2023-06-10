@@ -65,7 +65,7 @@
                                         <h5 style="font-weight: bold;">{{ item.variation.product.product_name }}</h5>
                                     </td>                
                                     <td>
-                                    <h5 style="font-weight: bold;">₹{{ item.variation.product.product_price }}</h5>
+                                    <h5>{% if item.variation.product.offer %} <del class="text-danger">₹ {{item.variation.product.product_price}}</del> ₹{{item.variation.product.get_offer}}{% else %} ₹ {{item.variation.product.product_price}} {% endif %}</h5>
                                     </td>
                                     <td>
                                         <div class="continue__btn">
@@ -103,6 +103,7 @@
     <!-- Shopping Cart Section End -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     $(document).ready(function() {
         $(document).on('click', '.deleteWishlit', function(e) {
@@ -118,7 +119,6 @@
                     csrfmiddlewaretoken: '{{csrf_token}}'
                 },
                 success: function(response) {
-                    alertify.success(response.status);
                     $('.cartdata').load(location.href + " .cartdata");
                 }
             });
@@ -141,10 +141,18 @@ $(document).on('click', '.addToCartBtn', function(e) {
       'prod_id': prod_id,
       csrfmiddlewaretoken: '{{csrf_token }}'
     },
-    success: function(response) {
-      console.log(response);
-      alertify.success(response.status);
-      $('.cartdata').load(location.href + " .cartdata");
+    success: function (response){
+        console.log(response)
+      if (response.status === 'Product already in Cart' || response.status === 'No such product found' || response.status === 'Only few quantity available') {
+          swal("Error!", response.status, "error")
+          $('.cartdata').load(location.href + " .cartdata");
+      }else if (response.status === 'Product added successfully'){
+        swal("Congratulations!.", response.status, "success")
+          $('.cartdata').load(location.href + " .cartdata");
+      }else{
+        swal("Error!.", response.status, "error")
+        $('.cartdata').load(location.href + " .cartdata");
+      }
     }
   });
 });
