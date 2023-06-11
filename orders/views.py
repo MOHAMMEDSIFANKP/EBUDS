@@ -65,7 +65,7 @@ def vieworderdetail(request,orderitem_id):
     try:
         order_item = OrderItem.objects.filter(order__tracking_no=orderitem_id)
         order = Order.objects.get(tracking_no = orderitem_id)
-    except OrderItem.DoesNotExist:
+    except Order.DoesNotExist:
         messages.error(request, "The specified OrderItem does not exist.")
         return redirect('orders')
     address = int(order.address.id)
@@ -88,7 +88,6 @@ def orderreturn(request,return_id):
         try:
             orderitem_id = OrderItem.objects.get(id=return_id)
         except OrderItem.DoesNotExist:
-            messages.error(request, "The specified OrderItem does not exist.")
             return redirect('orders')
         qty = orderitem_id.quantity
         pid = orderitem_id.variation.id

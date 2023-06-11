@@ -46,7 +46,7 @@
 {% endfor %}
    <!-- Product Detail -->
 
-   <section class="sec-product-detail bg0 p-t-65 p-b-60">
+   <section class="sec-product-detail bg0 p-t-65 p-b-60 ">
     <div class="container ">
        <div class="row sifan product_data ">
           <div class="col-md-6 col-lg-7 p-b-30">
@@ -145,7 +145,7 @@
                                <i class="fa fa-minus"></i>
                             </div>
 
-                            <input class="form.control mtext-104 cl3 txt-center num-product qty-input" type="number" name="num-product " value="1">
+                            <input class="form.control mtext-104 cl3 txt-center num-product qty-input" type="number" name="num-product " value="1"id="quantityInput">
 
                             <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                <i class="fa fa-plus"></i>
@@ -155,10 +155,10 @@
                          <div class="cartdata">
                          <input type="hidden" value="{{variation.product.id}}" class="prod_id" >
                          <input type="hidden" value="{{variation.id}}" class="var_id" >
-                         <button type="submit" class="primary-btn addToCartBtn ms-auto mt-1" >{% if variation.quantity > 0  %}Add to cart {% else %}Out of stok{% endif %}</button>
-                                 
+                         
+                         <button type="submit" class="primary-btn addToCartBtn ms-auto mt-1 " >{% if variation.quantity > 0  %}Add to cart {% else %}Out of stok{% endif %}</button>        
                           </div>
-                          
+
                       </div>                  
                    </div>	
                 </div>
@@ -773,6 +773,7 @@
           },
           success: function (response){
             console.log(response)
+            
             if (response.status === 'Product already in Cart' || response.status === 'No such product found' || response.status === 'Only few quantity available') {
               swal("Error!.", response.status, "error")
               $('.cartdata').load(location.href + " .cartdata");
@@ -807,10 +808,14 @@ $('.ChangeColor').change(function (e) {
             console.log(response);
             {% comment %} alertify.success(response.status); {% endcomment %}
             var variant_id = response.variation_id
-            console.log(variant_id,'daxo');
-            console.log(variant_id);
+            var variationQuantity = response.variation_quantity; 
             var var_d = document.getElementsByClassName('var_id')[0].value = variant_id
-            console.log('new varid = ',var_d)
+            var addToCartBtn = $('.addToCartBtn');
+            if (variationQuantity > 0) {
+              addToCartBtn.text('Add to cart');
+            } else {
+              addToCartBtn.text('Out of stock');
+            }
 
             imageElement = document.getElementById('product-image-1')  
             imageElement2 = document.getElementById('product-image-2')
@@ -826,7 +831,7 @@ $('.ChangeColor').change(function (e) {
               $("#producnt-lg-image1").attr('href','{{variant.image1.url}}')
               $("#producnt-lg-image2").attr('href','{{variant.image2.url}}')
               $("#producnt-lg-image3").attr('href','{{variant.image3.url}}')
-
+              $('.cartdatas').load(location.href + " .cartdatas");
 
               }
             {% endfor %}

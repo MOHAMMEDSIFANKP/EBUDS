@@ -28,11 +28,12 @@
       <form action="{% url 'createbanner'%}"  enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
-            <img class="img-fluid w-100" src="{{c.banners_image.url}} " alt="">
+            <img class="img-fluid w-100" alt="">
           </div> 
 
           <div class="form-outline mb-4">
-            <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+            <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control" id="image-input"/>
+            <small id="image-error" class="text-danger text-center"></small>
           </div>
 
           <div class="form-outline mb-4">
@@ -121,19 +122,20 @@
 
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Banner</h1>
+                              <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Banner</h1><br>
+                              
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                               <form  method="POST" action="{% url 'editbanner' c.id %}"  enctype="multipart/form-data">
                                 {% csrf_token %}
-  
-                                <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
-                                  <img class="img-fluid w-100" src="{{c.banners_image.url}} " alt="">
+                                <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0 ">
+                                  <img class="img-fluid w-100" src="{{c.banners_image.url}} " alt="" id="image">
                                 </div> 
                 
                                 <div class="form-outline mb-4">
-                                  <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                                  <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control" id="image-inputs"/>
+                                  <small id="image-errors" class="text-danger text-center"></small>
                                 </div>
 
                                 <div class="form-outline mb-4">
@@ -210,6 +212,4 @@
       {% if message %}
       <div class="message"><a href="{%url 'banner'%}"><h1 class="font-weight-bold text-center pt-5" style="color: #403c3c52;font-weight: bold;">{{ message }}</h4> </a></div>
      {% endif %}
-  
-
 {% endblock  %}

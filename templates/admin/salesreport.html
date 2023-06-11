@@ -3,11 +3,7 @@
 {% block body %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
-{% for m in messages  %}
-<div class="alert alert-info" id="message" role="alert">
-  {{m}}
-</div>
-{% endfor %}
+
 
 
 <div class="pagetitle">
@@ -70,13 +66,7 @@
                       {% endfor %}
                   </tbody>
                   <tfoot>
-                      {% comment %} <tr>
-                          <th>ID</th>
-                          <th>Customer</th>
-                          <th>Product</th>
-                          <th>Date</th>
-                          <th>Price</th>
-                      </tr> {% endcomment %}
+    
                   </tfoot>
               </table>
               {% endif %}
@@ -129,7 +119,12 @@
       } );
   } );
     </script>
-
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+     {% for msg in messages %}
+     swal("Error!", "{{msg}}", "error");
+     {% endfor %}
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>

@@ -182,10 +182,39 @@ def adminsignup(request):
 
 # Create your views here.
 def dashboard(request):
-    if request.user.is_authenticated and request.user.is_superuser:
-        return render(request,'admin/dashboard.html')
-    else:
+    if not request.user.is_superuser:
         return redirect('adminsignin')
+
+    delivered_items = OrderItem.objects.filter(status='Delivered')
+
+    revenue = 0
+    for item in delivered_items:
+        revenue += item.order.total_price
+
+    top_selling = OrderItem.objects.annotate(total_quantity=Sum('quantity')).order_by('-total_quantity').distinct()[:5]
+
+    recent_sale = OrderItem.objects.all().order_by('-id')[:5]
+
+    today = datetime.today()
+    date_range = 7
+
+    four_days_ago = today - timedelta(days=date_range)
+
+    orders = Order.objects.filter(created_at__gte=four_days_ago, created_at__lte=today)
+
+    sales_by_day = orders.annotate(day=TruncDay('created_at')).values('day').annotate(total_sales=Sum('total_price')).order_by('day')
+
+    sales_dates = Order.objects.annotate(sale_date=Cast('created_at', output_field=DateField())).values('sale_date').distinct()
+
+    context = {
+        'total_users':User.objects.count(),
+        'sales':OrderItem.objects.count(),
+        'revenue':revenue,
+        'top_selling':top_selling,
+        'recent_sales':recent_sale,
+        'sales_by_day':sales_by_day,
+    }
+    return render(request,'admin/dashboard.html',context)
 
 # user
 def user(request):
@@ -360,6 +389,71 @@ def deletebanner(request,banner_id):
     ban.delete()
     return redirect('banner')
 
+# offer
+def adminoffer(request):
+    context = {
+        'offer' : Offer.objects.all()
+    }
+
+    return render (request,'offer/offer.html',context)
+
+def addoffer(request):
+    if request.method =='POST':
+        ordername = request.POST.get('ordername')
+        discount = request.POST.get('discount')
+        if ordername.strip() == '':
+            messages.error(request, "Can't blank order name")
+            return redirect('adminoffer')
+        if discount.strip() =='':
+            messages.error(request, "Can't blank Discount")
+            return redirect('adminoffer')
+        offer = Offer.objects.create(offer_name=ordername,discount_amount=discount)
+        offer.save()
+        return redirect('adminoffer')
+    
+def editoffer(request,offer_id):
+  if request.method == 'POST':
+    orfername = request.POST.get('orfername')
+    discount = request.POST.get('discount')
+    if orfername.strip() == '':
+        messages.error(request, "Order name cannot be blank.")
+        return redirect('adminoffer')
+    if discount.strip() == '':
+        messages.error(request, "Can't blank Offer field")
+        return redirect('adminoffer')
+    try:
+        if Offer.objects.filter(id=offer_id,offer_name = orfername).exists():
+            pass
+        else:
+            offer = Offer.objects.get(id=offer_id)
+            offer.offer_name = orfername
+            offer.save()
+            messages.success(request, "Offer name updated successfully.")
+    except Offer.DoesNotExist:
+        messages.error(request, "The specified offer does not exist.")
+        return redirect('adminoffer')
+
+    try:
+        if Offer.objects.filter(id=offer_id,discount_amount = discount).exists():
+            pass
+        else:
+            offer = Offer.objects.get(id=offer_id)
+            offer.discount_amount = discount
+            offer.save()
+            messages.success(request, "Offer Discount updated successfully.")
+        return redirect('adminoffer')
+    except Offer.DoesNotExist:
+        messages.error(request, "The specified offer does not exist.")
+        return redirect('adminoffer')
+
+def deleteoffer(request,delete_id):
+    try:
+        offer = Offer.objects.filter(id = delete_id)
+        offer.delete()
+        return redirect('adminoffer')
+    except Offer.DoesNotExist:
+        messages.error(request, "The specified offer does not exist.")
+        return redirect('adminoffer')
 # Search User
 def searchuser(request):
     if not request.user.is_superuser:
@@ -380,7 +474,7 @@ def searchuser(request):
             message = "Please enter a valid search keyword"
             return render(request, 'admin/user.html', {'message': message})
     else:
-        return render(request, '404.html')
+        return render(request, 'error/index.html')
     
 # Aearch Brand
 def search_brand(request):
@@ -402,7 +496,7 @@ def search_brand(request):
             message = "Please enter a valid search keyword"
             return render(request, 'brand/brand.html', {'message': message})
     else:
-        return render(request, '404.html')
+        return render(request, 'error/index.html')
     
 # Search Banner
 def search_banner(request):
@@ -424,24 +518,36 @@ def search_banner(request):
             message = "Please enter a valid search keyword"
             return render(request, 'banner/banner.html', {'message': message})
     else:
-        return render(request, '404.html')
+        return render(request, 'error/index.html')
 
-# offer
-def adminoffer(request):
-    context = {
-        'offer' : Offer.objects.all()
-    }
+# Search Offer
+def search_offer(request):
+    if not request.user.is_superuser:
+        return redirect('adminsignin')
+    if 'keyword' in request.GET:
+        keyword = request.GET['keyword']
+        if keyword:
+            offer = Offer.objects.filter(offer_name__icontains=keyword).order_by('id')
+            if offer.exists():
+                context = {
+                    'offer': offer,
+                }
+                return render(request, 'offer/offer.html', context)
+            else:
+                message = "Offer not found."
+                return render(request, 'offer/offer.html', {'message': message})
+        else:
+            message = "Please enter a valid search keyword"
+            return render(request, 'offer/offer.html', {'message': message})
+    else:
+        return render(request, 'error/index.html')
 
-    return render (request,'offer/offer.html',context)
-from datetime import datetime
 # Sales reprt
+from datetime import datetime
 def salesreport(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
     context = {}
-
-
-
     if request.method == 'POST':
         start_date = request.POST.get('start-date')
         end_date = request.POST.get('end-date')

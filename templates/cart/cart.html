@@ -88,7 +88,7 @@
     
                                                 <input readonly id="pro_qty{{item.variation.id}}" type="text" class="form-control form-control-sm  text-center" value="{{item.product_qty}}">
     
-                                                <div class="input-group-btn">
+                                                <div class="input-group-btn sifan">
                                                     <button data-price="{{item.variant.price}}" data-variantid="{{item.variation.id}}" class="btn btn-sm border border-secondary btn-plus changeQuantity">
                                                         <i class="fa fa-plus"></i>
                                                     </button>
@@ -154,20 +154,21 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
 
- $('.quantity button').on('click', function () {
+$('.quantity button').on('click', function () {
     var button = $(this);
-    var oldValue = button.parent().parent().find('input').val();
+    var input = button.parent().parent().find('input');
+    var oldValue = parseFloat(input.val());
+    var newVal;
+
     if (button.hasClass('btn-plus')) {
-        var newVal = parseFloat(oldValue) + 1;
+        newVal = (oldValue < 10) ? oldValue + 1 : 10;  // Increment if less than 10, otherwise keep it as 10
     } else {
-        if (oldValue > 1) {
-            var newVal = parseFloat(oldValue) - 1;
-        } else {
-            newVal = 1;
-        }
+        newVal = (oldValue > 1) ? oldValue - 1 : 1;  // Decrement if greater than 1, otherwise keep it as 1
     }
-    button.parent().parent().find('input').val(newVal);
+
+    input.val(newVal);
 });
+
 
 $('.changeQuantity').click(function(e) {
     e.preventDefault();
@@ -217,10 +218,11 @@ $(document).ready(function() {
             },
             success: function(response) {
                 
-                sub_total = parseInt(response.sub_total);
+                sub_total = parseFloat(response.sub_total);
+                var tax = Math.floor(sub_total *0.18);
                 console.log(response);
                 document.getElementById('sub_total').textContent = sub_total;
-                document.getElementById('tax_field').textContent = sub_total * 0.18;
+                document.getElementById('tax_field').textContent = tax
                 document.getElementById('grand_total').textContent = sub_total + (sub_total * 0.18);
                 $('.cartdata').load(location.href + " .cartdata");
             }
@@ -228,6 +230,7 @@ $(document).ready(function() {
     });
 });
 </script>
+
     
 
 

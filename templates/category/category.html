@@ -30,7 +30,8 @@
         <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
         </div> 
         <div class="form-outline mb-4">
-          <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+          <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control" id="image-input"/>
+          <small id="image-error" class="text-danger text-center"></small>
         </div>
         <div class="form-outline mb-4">
           <input name='categories' type="text" id="form3Example3cg" class="form-control form-control-lg" />
@@ -119,7 +120,8 @@
                                 </div> 
                 
                                 <div class="form-outline mb-4">
-                                  <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                                  <input name="image" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"id="image-inputs"/>
+                                  <small id="image-errors" class="text-danger text-center"></small>
                                 </div>
 
                                 <div class="form-outline mb-4">

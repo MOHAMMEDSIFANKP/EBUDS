@@ -32,7 +32,8 @@
             <img class="img-fluid w-100" src="{{var.image1.url}} " alt="">
           </div> 
           <div class="form-outline mb-4">
-            <input name="image1" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+            <input name="image1" type="file" accept="image/png, image/jpeg, image/svg" class="form-control" id="image-input"/>
+            <small id="image-error" class="text-danger text-center"></small>
           </div>
 
           <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
@@ -162,14 +163,16 @@
                                   <img class="img-fluid w-100" src="{{var.image1.url}} " alt="">
                                 </div> 
                                 <div class="form-outline mb-4">
-                                  <input name="image1" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                                  <input name="image1" type="file" accept="image/png, image/jpeg, image/svg" class="form-control" id="image-inputs"/>
+                                    <small id="variation-error" class="text-danger text-center"></small>
                                 </div>
 
                                 <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">
                                   <img class="img-fluid w-100" src="{{var.image2.url}} " alt="">
                                 </div> 
                                 <div class="form-outline mb-4">
-                                  <input name="image2" type="file" accept="image/png, image/jpeg, image/svg" class="form-control"/>
+                                  <input name="image2" type="file" accept="image/png, image/jpeg, image/svg" class="form-control" id="variation_2'"/>
+                                  <small id="image-errors" class="text-danger text-center"></small>
                                 </div>
 
                                 <div style="width: 100px;" class="card-header category-img position-relative overflow-hidden bg-transparent border p-0">

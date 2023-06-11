@@ -16,6 +16,7 @@ def shop(request,category_slug=None):
     brand_id = request.GET.get('brand')
     filters = request.GET.get('filters')
     sort = request.GET.get('sort')
+    color = request.GET.get('color')
 
     # Brand filter
     if brand_id:
@@ -65,6 +66,14 @@ def shop(request,category_slug=None):
     elif sort == 'htol':
         variation = Variations.objects.all().order_by('-product__product_price')
         paginator = Paginator(variation, 6)
+    elif color:
+        variation = Variations.objects.filter(color=color)
+        if not variation:
+            message = "No item available in this Color."
+            return render(request, 'user/shop.html', {'message': message})
+        print(variation,'daxooo')
+        paginator = Paginator(variation, 6)
+
     else:
     
     # All Products
@@ -95,7 +104,8 @@ def single(request, var_id):
         color_id = request.POST.get('colors')
         prod_id = request.POST.get('prod_id')
         variation = Variations.objects.get(color=color_id, product=prod_id)
-        return JsonResponse({'variation_id':variation.id})
+        variation_quantity = variation.quantity
+        return JsonResponse({'variation_id':variation.id, 'variation_quantity':variation_quantity})
     
     variation_list = Variations.objects.filter(product=variation.product.id)
     context = {
