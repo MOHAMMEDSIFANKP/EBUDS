@@ -70,6 +70,5 @@ class Variations(models.Model):
     image1 = models.ImageField(upload_to='photos/variations')
     image2 = models.ImageField(upload_to='photos/variations')
     image3 = models.ImageField(upload_to='photos/variations')
-
-
-    
+    def __str__(self) -> str:
+        return f"{self.product, self.color}"

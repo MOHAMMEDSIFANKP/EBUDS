@@ -11,7 +11,7 @@ body {
 #notfound {
   position: relative;
   height: 100vh;
-  background: #030005;
+  background: #eae6ed;
 }
 
 #notfound .notfound {
@@ -50,7 +50,7 @@ body {
   margin-top: 0px;
   margin-bottom: 0px;
   margin-left: -12px;
-  color: #030005;
+  color: #e6deeb;
   text-transform: uppercase;
   text-shadow: -1px -1px 0px #8400ff, 1px 1px 0px #ff005a;
   letter-spacing: -20px;
@@ -65,9 +65,9 @@ body {
   top: 110px;
   font-size: 42px;
   font-weight: 700;
-  color: #fff;
+  color: #655a5a;
   text-transform: uppercase;
-  text-shadow: 0px 2px 0px #8400ff;
+  text-shadow: 0px 2px 0px #540e96;
   letter-spacing: 13px;
   margin: 0;
 }

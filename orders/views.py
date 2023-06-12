@@ -19,8 +19,8 @@ from django.shortcuts import get_object_or_404
 @login_required(login_url='signin')
 def orders(request):
     user = request.user
-    orders = Order.objects.filter(user=user)
-    orderitems = OrderItem.objects.filter(order__in=orders).order_by('-order__update_at')
+    orders = Order.objects.filter(user=user).order_by('-created_at')
+    orderitems = OrderItem.objects.filter(order__in=orders).order_by('-order__created_at')
 
     context = {
         'orders': orders,

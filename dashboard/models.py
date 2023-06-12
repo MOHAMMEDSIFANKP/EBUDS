@@ -32,3 +32,9 @@ class banner(models.Model):
     def __str__(self):
       return self.banner_name
 
+# Contact Us
+class Contact_us(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

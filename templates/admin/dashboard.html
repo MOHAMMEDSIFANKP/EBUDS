@@ -30,7 +30,7 @@
                   <i class="bi bi-cart"></i>
                 </div>
                 <div class="ps-3">
-                  <h6>{{sales}} <span class="text-muted" style="font-size: 20px;">Products sold</span></h6>
+                  <h6>{{sales |floatformat}} <span class="text-muted" style="font-size: 20px;">Products sold</span></h6>
                   {% comment %} <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span> {% endcomment %}
 
                 </div>
@@ -54,7 +54,7 @@
                   <i class="bi bi-currency-dollar"></i>
                 </div>
                 <div class="ps-3">
-                  <h6>₹ {{revenue}}</h6>
+                  <h6>₹ {{revenue|floatformat:2}}</h6>
                   {% comment %} <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span> {% endcomment %}
 
                 </div>
@@ -105,7 +105,7 @@
                     series: [{
                       name: 'Sales',
                       data: [{% for sale in sales_by_day  %}
-                        {{sale.total_sales}},
+                        {{sale.total_sales|floatformat:2}},
                       {% endfor %}],
                     }],
                     chart: {
