@@ -158,7 +158,14 @@ def razarypaycheck(request):
     cart = Cart.objects.filter(user=request.user)
     total_price = 0
     for item in cart:
-        total_price = total_price + item.product.product_price * item.product_qty
-
+        if item.product.offer == None:
+            total_price = total_price + item.product.product_price * item.product_qty
+            tax = total_price * 0.18
+            grand_total += total_price+tax
+        else:
+            total_price += item.product.product_price * item.product_qty
+            total_price -= item.product.offer.discount_amount
+            tax = total_price * 0.18
+            total_price +=tax
     return JsonResponse({'total_price': total_price})
 

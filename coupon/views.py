@@ -18,7 +18,7 @@ def apply_coupon(request):
         except Coupon.DoesNotExist:
             return JsonResponse({'status': 'Coupon does not exist'})
         
-        if Usercoupon.objects.filter(user=request.user, coupon__coupon_code=coupon_code).exists():
+        if Usercoupon.objects.filter(user=request.user).exists():
             return JsonResponse({'status': 'Coupon already used!'})
         
         if grand_total > coupon.min_value:

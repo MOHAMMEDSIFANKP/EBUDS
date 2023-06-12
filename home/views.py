@@ -67,5 +67,9 @@ def search_contact(request):
             return render(request, 'contact_us/contact_us.html', {'message': message})
     else:
         return render(request, 'error/index.html')
+
+# Blog
+def blog(request):
+    return render(request,'blog/blog.html')
 def error_404_view(request,exception):
     return render(request,'error/index.html')
