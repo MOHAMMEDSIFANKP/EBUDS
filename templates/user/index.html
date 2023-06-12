@@ -102,7 +102,7 @@
                                 <i class="fa fa-star-o"></i>
                                 <i class="fa fa-star-o"></i>
                             </div>
-                            <h5>{% if Variations.product.offer %}₹ <del> {{Variations.product.product_price}}</del> {{Variations.product.get_offer}}{% else %} ₹ {{Variations.product.product_price}} {% endif %}</h5>
+                            <h5>{% if Variations.product.offer %} <del> ₹{{Variations.product.product_price}}</del>&nbsp;&nbsp;₹{{Variations.product.get_offer}}{% else %} ₹ {{Variations.product.product_price}} {% endif %}</h5>
                             {% comment %} <h5>{{Variations.product.product_price}}</h5> {% endcomment %}
                             <div class="product__color__select">
                                 <label for="pc-1">
@@ -138,7 +138,7 @@
                         <img src="{%static 'user/image/banner.jpg'%}" alt="">
                         <div class="hot__deal__sticker">
                             <span>Sale Of</span>
-                            <h5>$29.99</h5>
+                            <h5>₹199.99</h5>
                         </div>
                     </div>
                 </div>

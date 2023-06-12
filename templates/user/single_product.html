@@ -99,7 +99,7 @@
                 </h2>
                   
                 <span class="mtext-106 cl2" style="font-weight: 700;">
-                  <h5>{% if variation.product.offer %}₹ <del class="text-danger"> {{variation.product.product_price}}</del> {{variation.product.get_offer}}{% else %} ₹ {{variation.product.product_price}} {% endif %}</h5>
+                  <h5>{% if variation.product.offer %} <del class="text-danger"> ₹{{variation.product.product_price}}</del>&nbsp; ₹ {{variation.product.get_offer}}{% else %} ₹ {{variation.product.product_price}} {% endif %}</h5>
                 </span>
 
                 <p class="stext-102 cl3 p-t-23" style="font-size: larger;">

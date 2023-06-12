@@ -189,6 +189,11 @@ $('.changeQuantity').click(function(e) {
             console.log(response);
             if (response.status === 'Not allowed this Quantity') {
                 swal("Error!", response.status, "error")
+                var checkoutLink = '<a href="#" class="primary-btn">Not allowed this quantity</a>';
+                 $("a.primary-btn").replaceWith(checkoutLink);
+            }else{
+            var checkoutLink = '<a href="{%url 'checkout'%}" class="primary-btn">Proceed to checkout</a>';
+            $("a.primary-btn").replaceWith(checkoutLink);
             }
             sub_total = parseInt(response.sub_total)
             

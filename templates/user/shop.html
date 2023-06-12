@@ -181,7 +181,7 @@
                                     <i class="fa fa-star-o"></i>
                                 </div>
                                
-                                <h5>{% if variation.product.offer %}₹ <del class="text-danger"> {{variation.product.product_price}}</del> {{variation.product.get_offer}}{% else %} ₹ {{variation.product.product_price}} {% endif %}</h5>
+                                <h5>{% if variation.product.offer %} <del class="text-danger">₹ {{variation.product.product_price}}</del>&nbsp; ₹{{variation.product.get_offer}}{% else %} ₹ {{variation.product.product_price}} {% endif %}</h5>
                                 <input type="hidden" class="variantions" value="{{product.id}}">
                                 <div class="product__color__select">
                                     <label for="pc-4">
