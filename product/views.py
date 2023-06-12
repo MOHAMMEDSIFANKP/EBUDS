@@ -32,9 +32,13 @@ def createproduct(request):
         brandname = request.POST.get('brand')
         category_id = request.POST.get('category')
         price_range = request.POST.get('price_range')
-        offer = request.POST.get('offer')
-
+        
 # Validaiton
+        offer = request.POST.get('offer')
+        if offer == 'No offer':
+            offer_id = None
+        else:
+            offer_id = Offer.objects.get(id=offer)
         if products.objects.filter(product_name=name).exists():
             messages.error(request, 'Product name already exists')
             return redirect('product')
@@ -54,8 +58,6 @@ def createproduct(request):
         categeryid  = category.objects.get(id=category_id)
         brandid = brand.objects.get(brand_name=brandname)
         prange = PriceFilter.objects.get(id=price_range)
-        offer_id = Offer.objects.get(id = offer)
-
 # Save        
         produc = products(
             product_name=name,
@@ -67,7 +69,6 @@ def createproduct(request):
             price_range =prange,
             offer = offer_id
         )
-        
         produc.save()
         return redirect('product')
     return render(request, 'product/product.html' )
