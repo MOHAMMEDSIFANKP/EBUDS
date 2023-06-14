@@ -116,14 +116,28 @@ def orderreturn(request,return_id):
 def orderdetails(request):
     if not request.user.is_superuser:
         return redirect('adminsignin')
-    orders = Order.objects.all()
+    orders = Order.objects.all().order_by('-created_at')
     orderitems = OrderItem.objects.filter(order__in=orders).order_by('-order__update_at')
     context = {
         'orders': orders,
         'orderitems': orderitems,
     }
     return render(request, 'orders/admin_orders.html',context)
-
+# Admin side Order View
+def adminrderdetail(request,track_id):
+    try:
+        order_item = OrderItem.objects.filter(order__tracking_no=track_id)
+        order = Order.objects.get(tracking_no = track_id)
+    except Order.DoesNotExist:
+        messages.error(request, "The specified OrderItem does not exist.")
+        return redirect('orderdetails')
+    address = int(order.address.id)
+    cotext = {
+        'order' : order,
+        'address': Address.objects.get(id=address),
+        'order_item' : order_item,
+    }
+    return render(request,'orders/adminrderdetail.html',cotext)
 # Admin side Order satus change
 def changestatus(request):
     if not request.user.is_superuser:

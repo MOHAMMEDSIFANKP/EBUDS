@@ -24,4 +24,5 @@ urlpatterns = [
     path('deleteoffer/<int:delete_id>/',views.deleteoffer, name="deleteoffer"),
     path('search_offer/',views.search_offer, name="search_offer"),
     path('salesreport/',views.salesreport, name="salesreport"),
+    path('export_csv/',views.export_csv, name="export_csv"),
 ]

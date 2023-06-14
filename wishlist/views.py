@@ -18,7 +18,6 @@ def wishlist(request):
 
 # Add to wishlist
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
-@login_required(login_url='signin')
 def add_wishlist(request):
     if request.method == 'POST':
         if request.user.is_authenticated:

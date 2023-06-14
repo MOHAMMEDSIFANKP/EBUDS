@@ -1,6 +1,14 @@
 {% extends 'admin/dashboardbase.html' %}
 {% block title %}Offer{% endblock  %}
 {% block body %}
+<style>
+  @media only screen and (max-width: 456px) {
+.cards{
+  width: 518px;
+}
+
+}
+</style>
 <!-- Button trigger modal -->
 <a type="button" class="btn btn-secondary w-60" style="margin-top: 80px;margin-left: 10px;" data-bs-toggle="modal" data-bs-target="#addCategory">
   <i title="Add Category" class="fa fa-plus">Add offer</i>
@@ -67,7 +75,7 @@
 
         <!-- Recent Sales -->
         <div class="col-12">
-          <div class="card recent-sales overflow-auto">
+          <div class="card cards recent-sales overflow-auto">
             <div class="card-body">
 
               <table class="table table-borderless datatable">

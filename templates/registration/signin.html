@@ -3,15 +3,8 @@
 {% block body %}
 {% load static %}
 <!-- partial:index.partial.html -->
-<form method="POST">
+<form method="POST" onsubmit="return validateForm()">
 	{% csrf_token %}
-	{% if messages %}
-	{% for message in messages %}
-	<div class="text-center text-danger">
-	<strong>{{message}}</strong>
-	</div>
-	{% endfor %}
-	{% endif %}
 	<div class="svgContainer">
 		<div>
 			<svg class="mySVG" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 200 200">
@@ -133,4 +126,21 @@
 	<a href="{%url 'signup'%}" style="float: right; margin-top: 26px;text-decoration: none;"><span style="color: #217093;" >don’t have an account?</span> Register here .</a>
 	<a href="{%url 'forgot_password'%}" style="float: right; margin-top: 2px;text-decoration: none;">Forgot Password?</a>
 </form>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+  {% for msg in messages %}
+	swal("", "{{msg}}", "error");
+  {% endfor %}
+</script>
+<script>
+    function validateForm() {
+        var username = document.forms[0]["username"].value;
+        var password = document.forms[0]["password"].value;
+
+        if (username == "" || password == "") {
+            alert("Please fill in all required fields.");
+            return false;
+        }
+    }
+</script>
 {% endblock %}

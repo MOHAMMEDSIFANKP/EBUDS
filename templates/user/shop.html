@@ -167,12 +167,12 @@
                             <div class="product__item__text">
                             <h6> {{ variation.product.product_name }}</h6>
                              {% if variation.quantity <= 0  %}
-                             <a href="" class="add-cart">Out of Stock</a>
+                             <a href="#" class="add-cart">Out of Stock</a>
                              {% else %}
-                                <a type="button" class="add-cart addToCartBtn">+ Add To Cart</a>
-                                <input type="hidden" value="{{variation.product.id}}" class="prod_id" >
-                                <input type="hidden" value="{{variation.id}}" class="var_id" >  
+                                <a type="button" class="add-cart addToCartBtn">+ Add To Cart</a> 
                                 {% endif %}
+                                <input type="hidden" value="{{variation.product.id}}" class="prod_id" >
+                                <input type="hidden" value="{{variation.id}}" class="var_id" > 
                                 <div class="rating">
                                     <i class="fa fa-star-o"></i>
                                     <i class="fa fa-star-o"></i>
@@ -271,6 +271,7 @@ $('.addToCartBtn').click(function (e) {
 
       var variation_id = $(this).closest('.product_data').find('.var_id').val();
       var prod_id = $(this).closest('.product_data').find('.prod_id').val();
+      console.log(variation_id,prod_id,'daxo');
       $.ajax({
         method: "POST",
         url: "/wishlist/add_wishlist/",

@@ -29,7 +29,7 @@ form{
 	</style>
 <!-- partial:index.partial.html -->
 {% if otp %}
-<form class="row contact_form" action="{%url 'signup'%}" method="post">
+<form class="row contact_form" action="{%url 'signup'%}" method="post" >
 	{% csrf_token %}
 {% if messages %}
 {% for message in messages %}
@@ -43,12 +43,12 @@ form{
   </div>
   <input  type="hidden" name="email" value="{{usr.email}}">
 <div class="inputGroup inputGroup3">
-  <button type="submit" id="login">Log in</button>
+  <button type="submit" id="login">Verify</button>
 </div>
 <a href="{% url 'signup'%}" style="float: right; margin-top: 26px;text-decoration: none;">Return signup</a>
 </form>
 {% else %}
-<form class="row contact_form" action="{%url 'signup'%}" method="post">
+<form class="row contact_form" action="{%url 'signup'%}" method="post"  onsubmit="return validateForm()">
 	{% csrf_token %}
 	{% if messages %}
 	{% for message in messages %}
@@ -83,4 +83,19 @@ form{
 	<a href="{% url 'signin'%}" style="float: right; margin-top: 26px;text-decoration: none;">Already have an account?</a>
   </form>
 {% endif %}
+<script>
+    function validateForm() {
+        var firstname = document.forms[0]["firstname"].value;
+        var lastname = document.forms[0]["lastname"].value;
+        var name = document.forms[0]["name"].value;
+        var email = document.forms[0]["email"].value;
+        var password1 = document.forms[0]["password1"].value;
+        var password2 = document.forms[0]["password2"].value;
+
+        if (firstname == "" || lastname == "" || name == "" || email == "" || password1 == "" || password2 == "") {
+            alert("Please fill in all required fields.");
+            return false;
+        }
+    }
+</script>
 {% endblock %}

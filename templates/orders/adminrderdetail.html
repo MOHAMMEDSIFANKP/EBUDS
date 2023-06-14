@@ -1,0 +1,255 @@
+{% extends 'admin/dashboardbase.html' %}
+{% block  title%}Orders{% endblock  %}
+{% block body %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
+<style>
+      @media only screen and (max-width: 456px) {
+    .cards{
+      width: 518px;
+    }
+
+}
+</style>
+<div class="pagetitle ps-5" style="padding-top: 100px;">
+    <h1 style="font-weight: bold;padding-bottom: 40px;">Order Details</h1>
+</div><!-- End Page Title -->
+<section class="confirmation_part padding_top cartdata ">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+        </div>
+        <div class="text-center text-danger">
+          {% if messages %}
+              {% for message in messages %}
+                  <strong>{{ message }}</strong>
+              {% endfor %}
+          {% endif %}
+      </div>
+                
+        <div class="col-lg-6 col-lx-4">
+          <div class="card border rounded  mb-3">
+            <div class="card-body">
+              <h5 class="card-title" style="font-weight: bold;">{{address.first_name}} {{address.last_name}}</h5>
+              <p class="card-text">{{address.address}},{{address.city}},{{address.state}} </p>
+              <div>
+                <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#address{{forloop.counter}}">
+                    View
+                  </button>
+
+                  <!-- Modal -->
+                  <div class="modal fade" id="address{{forloop.counter}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h4 class="modal-title fs-6" id="staticBackdropLabel">View address</h4>
+                          <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            <i class="fa fa-times"></i>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.first_name}} {{ address.last_name}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.address}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Contact Number</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.phone}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.email}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">City</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.city}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Pincode</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.pincode}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">State</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.state}}
+                            </div>
+                          </div>
+                          <hr>
+
+                          <div class="row">
+                            <div class="col-sm-5">
+                              <p class="mb-0">Country</p>
+                            </div>
+                            <div class="col-sm-7">
+                                {{ address.country}}
+                            </div>
+                          </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-lx-4">
+          <div class="card border rounded  mb-3">
+            <div class="card-body">
+              <h5 class="card-title" style="font-weight: bold;">ORDER INFO</h5>
+              <h5 class="card-text">User Name<span> : {{order.user.username}}</span></p>
+              <h5 class="card-text">Tracking Id<span> : {{order.tracking_no}}</span></p>
+              <h5 class="card-text">Order Date<span> : {{order.created_at}}</span></p>
+              <h5 class="card-text">Payment Method<span> : {{order.payment_mode}}</span></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-12 container-fluid">
+          <div class="card cards border rounded  mb-3">
+            
+        <table class="product_data m-4">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Name & Price</th>
+              <th>Color</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for order_item in order_item %}
+            <tr>
+              <td class="product_cart_item">
+                <div class="product_cart_item_pic">
+                  <img src="{{ order_item.variation.image1.url }}" height="90px" alt="IMG">
+                </div>
+              </td>
+              <td class="product_cart_item_text">
+                <h5 style="font-weight: bold;">{{ order_item.product.product_name }}</h5>
+                <h5 style="font-weight: bold;">{% if order_item.product.offer %} <del class="text-danger"> ₹{{order_item.product.product_price}}</del> {{order_item.product.get_offer}}{% else %} ₹ {{variation.product.product_price}} {% endif %}</h5>
+
+              </td>
+              <td>{{ order_item.variation.color }}</td>
+              <td>{{ order_item.quantity }}</td>
+              <td class="cart__price total">{{ order_item.order.total_price |floatformat:2}}</td>
+              <td >{% if order_item.status == 'Pending' %}
+                <span class="badge p-2 my-2 text-secondary" style="font-size: medium;">{{order_item.status}}</span>
+                {% elif order_item.status == 'Processing' %}
+                <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{order_item.status}}</span>
+                {% elif order_item.status == 'Shipped' %}
+                <span class="badge p-2 my-2 text-primary" style="font-size: medium;">{{order_item.status}}</span>
+                {% elif order_item.status == 'Delivered' %}
+                <span class="badge p-2 my-2 text-success" style="font-size: medium;">{{order_item.status}}</span>
+                {% elif order_item.status == 'Cancelled' or 'refunded' %}
+                <span class="badge p-2 my-2 text-danger" style="font-size: medium;">{{order_item.status}}</span>
+                {% endif %}
+            </td>
+            <input type="hidden" class="orderitem_id" value="{{order_item.id}}">
+                <td>
+                    <div class="form-outline mb-4">
+                    <select class="form-select form-select-sm mt-3 changestatus status" aria-label=".form-select-sm example" name="status">
+                        {% for choice in order_item.orderstatuses %}
+                        {% if order_item.status == choice.0 %}
+                            <option selected value="{{ choice.0 }}">{{ choice.1 }}</option>
+                        {% else %}
+                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  </section>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
+<script>
+$(document).ready(function() {
+$(document).on('click', '.changestatus', function(e) {
+    e.preventDefault();
+
+    var orderitem_id = $(this).closest('.product_data').find('.orderitem_id').val();
+    var status = $(this).val();
+
+    $.ajax({
+        method: "POST",
+        url: "/orders/changestatus/",
+        data: {
+        'orderitem_id': orderitem_id,
+        'order_status': status,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        success: function(response) {
+        console.log(response);
+        // alertify.success(response.status);
+        $('.cartdata').load(location.href + " .cartdata", function() {
+            // Callback function executed after the content is loaded
+            // Additional code or actions can be performed here if needed
+        });
+        },
+        error: function(xhr, status, error) {
+        console.log(xhr.responseText);
+        // Handle error case
+        }
+    });
+    });
+});
+</script>
+{% endblock %}

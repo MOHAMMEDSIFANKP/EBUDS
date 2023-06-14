@@ -199,6 +199,7 @@
                               </div>
                               <div class="form-outline mb-4">
                                 <select class="form-select form-select-sm mt-3" aria-label=".form-select-sm example" name="offer">
+                                  <option >No offer</option>
                                   {% for c in offer %}
                                   <option value="{{ c.id }}">{{ c.offer_name }}</option>
                                   {% endfor %}

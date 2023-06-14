@@ -85,8 +85,12 @@ def editproduct(request,editproduct_id):
         brandname = request.POST.get('brand')
         category_id = request.POST.get('category')
         price_range = request.POST.get('price_range')
-        offer = request.POST.get('offer')
 # validation
+        offer = request.POST.get('offer')
+        if offer == 'No offer':
+            offer_id = None
+        else:
+            offer_id = Offer.objects.get(id=offer)
         try:
             is_availables = request.POST.get('checkbox', False)
             if is_availables == 'on':
@@ -103,7 +107,6 @@ def editproduct(request,editproduct_id):
         cates = category.objects.get(id=category_id)
         produc = brand.objects.get(brand_name=brandname)
         prange = PriceFilter.objects.get(id=price_range)
-        offer_id = Offer.objects.get(id = offer)
 # Save       
         cat = products.objects.get(slug=editproduct_id)
         cat.product_name = pname

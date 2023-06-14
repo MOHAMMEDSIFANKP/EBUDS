@@ -87,7 +87,7 @@ def signup(request):
                 usr.is_active=True
                 usr.save()
                 auth.login(request,usr)
-                messages.success(request,f'Account is created for {usr.email}')
+                # messages.success(request,f'Account is created for {usr.email}')
                 UserOTP.objects.filter(user=usr).delete()
                 return redirect('home')
             else:
@@ -253,7 +253,6 @@ def forgot_password(request):
                     context ={
                        'pre_email':email,
                     }
-                    messages.info(request,'Eamil fields are empty')
                     return render(request,'registration/forgotpassword.html',context)
                 else:
                     pass
@@ -281,6 +280,9 @@ def forgot_password(request):
                         fail_silently=False
                     )
                 return render(request,'registration/forgotpassword.html',{'otp':True,'usr':usr})
+            else:
+                messages.info(request,'You have not an account')
+                return render (request, 'registration/forgotpassword.html')
     return render (request, 'registration/forgotpassword.html')
 
 def reset(request):

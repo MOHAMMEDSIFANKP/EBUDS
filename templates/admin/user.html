@@ -1,9 +1,14 @@
 {% extends 'admin/dashboardbase.html' %}
 {% block  title%}User Controll{% endblock  %}
 {% block body %}
+<style>
+  @media only screen and (max-width: 456px) {
+.cards{
+  width: 518px;
+}
 
-
-
+}
+</style>
 <div class="pagetitle ps-5" style="padding-top: 100px;">
 <div class="shop__sidebar__search me-4" style="float: right;">
   <form action="{%url 'searchuser'%}">
@@ -23,7 +28,7 @@
       <div class="row">
         <!-- Recent Sales -->
         <div class="col-12">
-          <div class="card recent-sales overflow-auto">
+          <div class="card cards recent-sales overflow-auto">
             <div class="card-body">
             <table class="table table-borderless datatable">
                 <thead>

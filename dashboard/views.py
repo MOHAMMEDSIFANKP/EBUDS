@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect,get_object_or_404
+from django.http import HttpResponse
 from category.models import category
 from .models import brand, banner as banners
 from product.models import Offer
@@ -573,3 +574,19 @@ def salesreport(request):
         else:
             messages.error(request, 'No data found')
     return render(request, 'admin/salesreport.html', context)
+
+import csv
+
+def export_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Expenses' + \
+        str(datetime.now()) + '.csv'
+
+    writer = csv.writer(response)
+    writer.writerow(['user', 'total_price', 'payment_mode', 'tracking_no'])
+
+    expenses = Order.objects.all()
+    for expense in expenses:
+        writer.writerow([expense.user, expense.total_price, expense.payment_mode,expense.tracking_no])
+
+    return response

@@ -10,7 +10,6 @@ from django.contrib.auth.decorators import login_required
 
 # Add to cart
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
-@login_required(login_url='signin')
 def add_cart(request):
     if request.method == 'POST':
         if request.user.is_authenticated:

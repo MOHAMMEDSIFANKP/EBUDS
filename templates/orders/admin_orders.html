@@ -1,10 +1,20 @@
 {% extends 'admin/dashboardbase.html' %}
 {% block  title%}Orders{% endblock  %}
 {% block body %}
-<!-- ajax -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/alertify.min.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs/build/css/themes/default.min.css" />
-<!-- ajax end-->
+
+<style>
+  @media only screen and (max-width: 456px) {
+    .card{
+      width: 426px;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+      .btn {
+          font-size: 12px; 
+          padding: 5px 10px;
+      }
+  }
+</style>
 <div class="pagetitle ps-5" style="padding-top: 100px;">
 <div class="shop__sidebar__search me-4" style="float: right;">
   <form action="{%url 'search_orders'%}">
@@ -12,8 +22,9 @@
     <button type="submit"><span class="icon_search"></span></button>
   </form>
 </div>
+<a href="{% url 'export_csv' %}" class="btn btn-primary">Excel</a>
 
-  <h1 style="font-weight: bold;">Orders</h1>
+<h1 style="font-weight: bold;">Orders</h1>
   
 </div><!-- End Page Title -->
 
@@ -29,69 +40,24 @@
             <table class="table table-borderless datatable">
                 <thead>
                   <tr>
-                    <th>Users</th>
-                    <th>Product</th>
-                    <th>Name & Price</th>
-                    <th>Color</th>
-                    <th>Quantity</th>
+                    <th>Order_date</th>
+                    <th>Order_date</th>
                     <th>Total</th>
-                    <th>Payment Method</th>
-                    <th>Tracking No</th>
-                    <th>Status</th>
+                    <th>Tracking id</th>
                     <th>Action</th>
-                    <th></th>
-
                     <th></th>
                 </tr>
                 </thead>
                     <tbody >
-                      {% for odritem in orderitems %}
+                      {% for orders in orders %}
 
-                        <tr class="product_data">
-                          <td>{{odritem.order.user}}</td>
-                          <td class="product_cart_item">
-                              <div class="product_cart_item_pic ">
-                                  <img src="{{ odritem.variation.image1.url }}" height="90px" alt="IMG">
-                              </div>
-                          </td>
-                          <td class="product_cart_item_text">
-                              <h5 style="font-weight: bold;">{{ odritem.product.product_name }}</h5>
-                              <h5 style="font-weight: bold;">₹{{ odritem.product.product_price }}</h5>
-                          </td>
-                          <td>{{odritem.variation.color}}</td>
-                          <td>{{odritem.quantity}}</td>
-                          <td class="cart__price total">₹{{odritem.order.total_price}}</td>
-  
-                          </td>
-                          <td>{{odritem.order.payment_mode}}</td>
-                          <td>{{odritem.order.tracking_no}}</td>
-                          <td >{% if odritem.status == 'Pending' %}
-                            <span class="badge p-2 my-2 text-secondary" style="font-size: medium;">{{odritem.status}}</span>
-                            {% elif odritem.status == 'Processing' %}
-                            <span class="badge p-2 my-2 text-warning" style="font-size: medium;">{{odritem.status}}</span>
-                            {% elif odritem.status == 'Shipped' %}
-                            <span class="badge p-2 my-2 text-primary" style="font-size: medium;">{{odritem.status}}</span>
-                            {% elif odritem.status == 'Delivered' %}
-                            <span class="badge p-2 my-2 text-success" style="font-size: medium;">{{odritem.status}}</span>
-                            {% elif odritem.status == 'Cancelled' or 'refunded' %}
-                            <span class="badge p-2 my-2 text-danger" style="font-size: medium;">{{odritem.status}}</span>
-                            {% endif %}
-                        </td>
-                        <input type="hidden" class="orderitem_id" value="{{odritem.id}}">
-                        <td>
-                          <div class="form-outline mb-4">
-                            <select class="form-select form-select-sm mt-3 changestatus status" aria-label=".form-select-sm example" name="status">
-                              {% for choice in odritem.orderstatuses %}
-                                {% if odritem.status == choice.0 %}
-                                  <option selected value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                {% else %}
-                                  <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                {% endif %}
-                              {% endfor %}
-                            </select>
-                          </div>
-                        </td>
-                        
+                    <tr class="product_data">
+                      <td style="font-size: 17px;">{{ orders.user.username}}</td>
+                      <td style="font-size: 17px;">{{ orders.created_at }}</td>
+                      <td class="cart__price total">₹{{ orders.total_price|floatformat:2 }}</td>
+                      <td style="font-size: 17px;">{{ orders.tracking_no }}</td>
+                      <td><a href="{%url 'adminrderdetail' orders.tracking_no %}" class="btn btn-outline-dark">View order details</a></td>
+
                       </tr>
                         {% endfor %}
                     </tbody>
@@ -102,45 +68,7 @@
        </div>
     </div>
  </div>
- {% if message %}
- <div class="message"><a href="{%url 'orderdetails'%}"><h1 class="font-weight-bold text-center pt-5" style="color: #403c3c52;font-weight: bold;">{{ message }}</h4> </a></div>
-{% endif %}
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/alertifyjs/build/alertify.min.js"></script>
-<script>
-$(document).ready(function() {
-  $(document).on('click', '.changestatus', function(e) {
-    e.preventDefault();
-
-    var orderitem_id = $(this).closest('.product_data').find('.orderitem_id').val();
-    var status = $(this).val();
-    console.log(orderitem_id);
-    console.log(status);
-
-    $.ajax({
-        method: "POST",
-        url: "/orders/changestatus/",
-        data: {
-        'orderitem_id': orderitem_id,
-        'order_status': status,
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-        success: function(response) {
-        console.log(response);
-        alertify.success(response.status);
-        $('.cartdata').load(location.href + " .cartdata", function() {
-            // Callback function executed after the content is loaded
-            // Additional code or actions can be performed here if needed
-        });
-        },
-        error: function(xhr, status, error) {
-        console.log(xhr.responseText);
-        // Handle error case
-        }
-    });
-    });
-});
-</script>
+ </section>
 
 {% endblock  %}
 

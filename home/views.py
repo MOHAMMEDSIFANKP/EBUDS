@@ -16,7 +16,6 @@ def home(request):
     Banner = banner.objects.all()
     categories = category.objects.all()
     Brands = brand.objects.all()
-    print(banner,'sifan')
     dict_banner = {
         'banner' : Banner,
         'category' : categories,

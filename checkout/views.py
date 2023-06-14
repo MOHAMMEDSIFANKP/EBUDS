@@ -80,13 +80,18 @@ def placeorder(request):
                 cart_total_price +=tax
         payment = request.POST.get('payment_method')
         if (payment == "wallet"):
-            wallet = Wallet.objects.get(user = request.user)
-            if wallet.wallet >=cart_total_price:
-                wallet.wallet = wallet.wallet-cart_total_price
+            try:
+                wallet = Wallet.objects.get(user=request.user)
+            except Wallet.DoesNotExist:
+                wallet = Wallet.objects.create(user=request.user, wallet=0)
+
+            if wallet.wallet >= cart_total_price:
+                wallet.wallet = wallet.wallet - cart_total_price
                 wallet.save()
             else:
-                messages.error(request,'Your wallet amount is very low')
-                return redirect('checkout') 
+                messages.error(request, 'Your wallet amount is very low')
+                return redirect('checkout')
+
         if Usercoupon.objects.filter(user = request.user).exists():
             usercoupon = Usercoupon.objects.get(user = request.user)
             neworder.total_price = usercoupon.total_price
