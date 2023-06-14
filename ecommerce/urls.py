@@ -34,6 +34,7 @@ urlpatterns = [
     path('orders/',include('orders.urls')),
     path('wishlist/',include('wishlist.urls')),
     path('coupon/',include('coupon.urls')),
+    path('api/', include("apis.urls"))
 
 
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

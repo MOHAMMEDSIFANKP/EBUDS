@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     'orders',
     'mathfilters',
     'wishlist',
-    'coupon'
+    'coupon',
+    'rest_framework',
+    'apis',
 
 ]
 
