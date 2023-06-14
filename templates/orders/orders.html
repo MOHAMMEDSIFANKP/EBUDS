@@ -2,6 +2,20 @@
 {% block title %}My Orders{% endblock %}
 {% block body %}
 {% load static %}
+<style>
+    @media only screen and (max-width: 456px) {
+      .cards{
+        width: 344px;
+        margin-left: 14px;
+      }
+    }
+    @media only screen and (max-width: 767px) {
+        .btn {
+            font-size: 12px; 
+            padding: 5px 10px;
+        }
+    }
+  </style>
 <link rel="stylesheet" href="{% static 'dashboard/css/styles.min.css'%}"/>
 
 <link rel="stylesheet" type="text/css" href="{%static 'single/css/util.css'%}">
@@ -34,13 +48,13 @@
     rel="stylesheet">
 
 <!-- Shopping Cart Section Begin -->
-<section class="shopping__cart__table spad cartdata">
+<section class="shopping__cart__table spad cartdata cards">
     <div class="container">
         <div class="row ">
             <table class="product_data">
                 <thead>
                     <tr>
-                        <th>Order date</th>
+                        <th>Order_date</th>
                         <th>Total</th>
                         <th>Tracking id</th>
                         <th>Action</th>

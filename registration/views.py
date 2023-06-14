@@ -75,7 +75,8 @@ def validate_name(value):
 
 # Signup
 def signup(request):
-
+    if request.user.is_authenticated:
+        return redirect('home') 
     """ OTP VERIFICATION """
 
     if request.method=='POST':
