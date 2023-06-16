@@ -204,7 +204,6 @@ def dashboard(request):
     orders = Order.objects.filter(created_at__gte=four_days_ago, created_at__lte=today)
 
     sales_by_day = orders.annotate(day=TruncDay('created_at')).values('day').annotate(total_sales=Sum('total_price')).order_by('day')
-
     sales_dates = Order.objects.annotate(sale_date=Cast('created_at', output_field=DateField())).values('sale_date').distinct()
 
     context = {

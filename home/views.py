@@ -70,5 +70,7 @@ def search_contact(request):
 # Blog
 def blog(request):
     return render(request,'blog/blog.html')
+
+
 def error_404_view(request,exception):
     return render(request,'error/index.html')
