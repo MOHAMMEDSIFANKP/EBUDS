@@ -1,6 +1,6 @@
 asgiref==3.7.2
 backports.zoneinfo==0.2.1
-Django==4.2.6
+Django==3.2.23
 django-mathfilters==1.0.0
 djangorestframework==3.14.0
 Pillow==10.1.0
