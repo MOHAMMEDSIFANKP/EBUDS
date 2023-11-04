@@ -100,7 +100,7 @@ DATABASES = {
         'NAME': config('dbname'),                      
         'USER': config('dbuser'),
         'PASSWORD': config('dbpass'),
-        'HOST': 'localhost',
+        'HOST': config('dbhost'),
         'PORT': '5432',
     }
 }   
