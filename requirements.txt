@@ -8,4 +8,4 @@ psycopg==3.1.12
 python-decouple==3.8
 pytz==2023.3.post1
 sqlparse==0.4.4
-typing-extensions==4.8.0
+typing-extensions== 4.7.1
