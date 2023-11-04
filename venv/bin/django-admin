@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/home/sifan/Python/Week 11/venv/bin/python3" "$0" "$@"
-' '''
+#!/home/sifan/Python/EBUDS/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
