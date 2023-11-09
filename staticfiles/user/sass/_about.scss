@@ -1,0 +1,179 @@
+/*---------------------
+  About
+-----------------------*/
+.about {
+    padding-bottom: 70px;
+}
+
+.about__pic {
+    margin-bottom: 35px;
+
+    img {
+        min-width: 100%;
+    }
+}
+
+.about__item {
+    margin-bottom: 30px;
+
+    h4 {
+        color: $heading-color;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    p {
+        margin-bottom: 0;
+    }
+}
+
+/*---------------------
+  Testimonial
+-----------------------*/
+.testimonial {
+    background: #f3f2ee;
+}
+
+.testimonial__text {
+    text-align: center;
+    padding: 130px 150px 175px;
+
+    span {
+        color: #e53637;
+        font-size: 72px;
+    }
+
+    p {
+        color: $heading-color;
+        font-size: 20px;
+        font-style: italic;
+        line-height: 30px;
+        padding-top: 12px;
+        margin-bottom: 25px;
+    }
+}
+
+.testimonial__author {
+    display: inline-block;
+}
+
+.testimonial__author__pic {
+    float: left;
+    margin-right: 20px;
+
+    img {
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+    }
+}
+
+.testimonial__author__text {
+    overflow: hidden;
+    padding-top: 3px;
+
+    h5 {
+        color: $heading-color;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    p {
+        color: #b7b7b7;
+        margin-bottom: 0!important;
+        padding-top: 0;
+    }
+}
+
+.testimonial__pic {
+    height: 600px;
+}
+
+/*---------------------
+  Counter
+-----------------------*/
+.counter {
+    padding-bottom: 0;
+
+    .container {
+        border-bottom: 1px solid #e5e5e5;
+        padding-bottom: 70px;
+    }
+}
+
+.counter__item {
+    margin-bottom: 30px;
+    overflow: hidden;
+
+    .counter__item__number {
+        float: left;
+        margin-right: 15px;
+
+        h2 {
+            color: $heading-color;
+            font-weight: 700;
+            font-size: 60px;
+            line-height: 50px;
+            display: inline-block;
+        }
+    
+        strong {
+            color: $heading-color;
+            font-weight: 700;
+            font-size: 60px;
+            line-height: 50px;
+            display: inline-block;
+        }
+    }
+
+    span {
+        display: block;
+        color: #3d3d3d;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 25px;
+        overflow: hidden;
+    }
+}
+
+/*---------------------
+  Testimonial
+-----------------------*/
+.team {
+    padding-bottom: 70px;
+}
+
+.team__item {
+    margin-bottom: 30px;
+
+    img {
+        min-width: 100%;
+        margin-bottom: 25px;
+    }
+
+    h4 {
+        color: $heading-color;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    span {
+        font-size: 15px;
+        display: block;
+        color: #b7b7b7;
+    }
+}
+
+/*---------------------
+  Clients
+-----------------------*/
+.clients {
+    padding-top: 0;
+    padding-bottom: 25px;
+}
+
+.client__item {
+    display: block;
+    margin-bottom: 75px;
+    text-align: center;
+}

@@ -6,7 +6,7 @@ from django.http import Http404
 from django.contrib import messages
 from django.http.response import JsonResponse
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.views.generic import View
+from django.views.generic import *
 # Create your views here.
 
 #  Shop view
@@ -89,42 +89,30 @@ def shop(request,category_slug=None):
     return render(request, 'user/shop.html', dict_products)
 
 #  view Single images
-def single(request, var_id):
-    try:
-        variation = Variations.objects.get(id=var_id)
-    except Variations.DoesNotExist:
-        return render(request, 'error/index.html')
+class signle(View):
 
-    if request.method == 'POST':
+    template_name = 'user/single_product.html'
+
+    def get(self,request, var_id):
+        try:
+            variation = Variations.objects.get(id=var_id)
+            variation_list = Variations.objects.filter(product=variation.product.id)
+            context = {
+                'color': Color.objects.all(),   
+                'variation': variation,
+                'variation_list' : variation_list,
+            }
+            return render(request, self.template_name, context)
+        except Variations.DoesNotExist:
+            return render(self,request, 'error/index.html')
+        
+    def post(self,request,var_id):
         color_id = request.POST.get('colors')
         prod_id = request.POST.get('prod_id')
         variation = Variations.objects.get(color=color_id, product=prod_id)
         variation_quantity = variation.quantity
         return JsonResponse({'variation_id':variation.id, 'variation_quantity':variation_quantity})
     
-    variation_list = Variations.objects.filter(product=variation.product.id)
-    context = {
-        'color': Color.objects.all(),   
-        'variation': variation,
-        'variation_list' : variation_list,
-    }
-    return render(request, 'user/single_product.html', context)
-
-# class signle(View):
-#     template_name = 'user/single_product.html'
-#     def get(self,request, ):
-#         try:
-#             variation = Variations.objects.get(id=var_id)
-#         except Variations.DoesNotExist:
-#             return render(self,request, 'error/index.html')
-#     def post(self,request,var_id):
-#         color_id = request.POST.get('colors')
-#         prod_id = request.POST.get('prod_id')
-#         variation = Variations.objects.get(color=color_id, product=prod_id)
-#         variation_quantity = variation.quantity
-#         return JsonResponse({'variation_id':variation.id, 'variation_quantity':variation_quantity})
-    
-
 
 # Search
 def search(request):
@@ -150,5 +138,4 @@ def search(request):
             return render(request, 'user/shop.html', {'message': message})
     else:
         return render(request, '404.html')
-
 
