@@ -77,6 +77,10 @@ class signup(View):
     def get(self, request):
         if request.user.is_authenticated:
             return redirect('home') 
+
+        else:
+            return render(request,self.template_name)
+
     def post(self, request):
         if request.method=='POST':
             get_otp=request.POST.get('otp')
