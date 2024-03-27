@@ -1,13 +1,9 @@
-asgiref==3.7.2
-backports.zoneinfo==0.2.1
-Django==3.2.23
-django-mathfilters==1.0.0
-djangorestframework==3.14.0
-Pillow==9.5.0
-psycopg==3.1.12
-python-decouple==3.8
-pytz==2023.3.post1
-sqlparse==0.4.4
-typing-extensions== 4.7.1
-psycopg2
+Django
+django-mathfilters
+djangorestframework
+Pillow
+psycopg
+python-decouple
+typing-extensions
+psycopg
 gunicorn
